@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.56.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>*&lt;^_^&gt;*</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="https://caijinken.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://caijinken.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://caijinken.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://caijinken.github.io/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  <link href="https://caijinken.github.io/index.xml" rel="alternate" type="application/rss+xml" title="*<^_^>*" />
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://caijinken.github.io/"><h1>*&lt;^_^&gt;*</h1></a>
+      <p class="lead">
+       CaiJin`s site 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://caijinken.github.io/">Home</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2019. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="posts">
+<article class="post">
+  <h1 class="post-title">
+    <a href="https://caijinken.github.io/linux/arch_install/">Arch_install</a>
+  </h1>
+  <time datetime="2019-07-13T22:24:48&#43;0800" class="post-date">Sat, Jul 13, 2019</time>
+  使用*nux 制作U盘启动盘 fdisk -l #查看当前系统中的磁盘设备，这里u盘设备是/dev/disk2 umount /dev/disk2 #卸载挂载点，备份u盘里面的重要文件，制作启动盘会执行格式化 sudo dd if=archlinux-2019.07.01-x86_64.iso of=/dev/disk2 bs=1m #这用时可能会比较久，稍等一下  准备 制作好u盘启动盘之后，设置电脑从u盘启动，之后进入到arch live里默认以root用户登录，之后就可以进行准备操作了。
+vim /etc/hostname #修改安装后的主机名 fdisk /dev/sda #分区，注意设备，我这里是sda mkfs.ext4 /dev/sda1 #格式化分区 mount /dev/sda1 /mnt #挂载分区 vim /etc/pacman.d/mirrorlist #将中国区的源放到非注释的第一行，会提高软件包的下载速度，越靠前，优先级越高。 pacman -Syy #更新镜像源 dhcpcd #使用dhcp自动获取ip地址 ip addr show #应该能够看到分配到ip地址了，如果使用的wifi，并且加密方式是wpa，则执行以下命令，连接wifi wpa_supplicant -i wpl3s0 -c &lt;(wpa_passphrase wifi-ssid password) #wpl3s0 wifi-ssid password 分别是无线网卡名称，wifi名称，wifi密码  安装 pacstrap /mnt base base-devel #开始安装到mnt，一路回车就好，稍等直到完成。 arch-chroot /mnt #改变root目录 vim /etc/locale.gen #删除en_US.UTF-8 和 zh_CN.UTF-8 前面的注释 locale-gen #生成语言区域的一些文件 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime #设置时区为亚洲上海的时区(+08:00)  安装引导程序GRUB pacmanm -S os-prober grub #安装grub及依赖 grub-install --target=i386-pc /dev/sda #BIOS方式 grub-install /dev/sda #EFI方式 grub-mkconfig -o /boot/grub/grub.
+  
+  <div class="read-more-link">
+    <a href="/linux/arch_install/">Read More…</a>
+  </div>
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://caijinken.github.io/post/first/">First</a>
+  </h1>
+  <time datetime="2019-07-13T21:52:48&#43;0800" class="post-date">Sat, Jul 13, 2019</time>
+   Hello Jingege  aaa bbb ccc  
+  
+</article><article class="post">
+  <h1 class="post-title">
+    <a href="https://caijinken.github.io/about/">About</a>
+  </h1>
+  <time datetime="2019-07-13T21:46:13&#43;0800" class="post-date">Sat, Jul 13, 2019</time>
+  
+  
+</article>
+</div>
+    </main>
+
+    
+  </body>
+</html>

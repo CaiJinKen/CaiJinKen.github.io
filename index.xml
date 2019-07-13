@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>*&lt;^_^&gt;*</title>
+    <link>https://caijinken.github.io/</link>
+    <description>Recent content on *&lt;^_^&gt;*</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 13 Jul 2019 22:24:48 +0800</lastBuildDate>
+    
+	<atom:link href="https://caijinken.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Arch_install</title>
+      <link>https://caijinken.github.io/linux/arch_install/</link>
+      <pubDate>Sat, 13 Jul 2019 22:24:48 +0800</pubDate>
+      
+      <guid>https://caijinken.github.io/linux/arch_install/</guid>
+      <description>使用*nux 制作U盘启动盘 fdisk -l #查看当前系统中的磁盘设备，这里u盘设备是/dev/disk2 umount /dev/disk2 #卸载挂载点，备份u盘里面的重要文件，制作启动盘会执行格式化 sudo dd if=archlinux-2019.07.01-x86_64.iso of=/dev/disk2 bs=1m #这用时可能会比较久，稍等一下  准备 制作好u盘启动盘之后，设置电脑从u盘启动，之后进入到arch live里默认以root用户登录，之后就可以进行准备操作了。
+vim /etc/hostname #修改安装后的主机名 fdisk /dev/sda #分区，注意设备，我这里是sda mkfs.ext4 /dev/sda1 #格式化分区 mount /dev/sda1 /mnt #挂载分区 vim /etc/pacman.d/mirrorlist #将中国区的源放到非注释的第一行，会提高软件包的下载速度，越靠前，优先级越高。 pacman -Syy #更新镜像源 dhcpcd #使用dhcp自动获取ip地址 ip addr show #应该能够看到分配到ip地址了，如果使用的wifi，并且加密方式是wpa，则执行以下命令，连接wifi wpa_supplicant -i wpl3s0 -c &amp;lt;(wpa_passphrase wifi-ssid password) #wpl3s0 wifi-ssid password 分别是无线网卡名称，wifi名称，wifi密码  安装 pacstrap /mnt base base-devel #开始安装到mnt，一路回车就好，稍等直到完成。 arch-chroot /mnt #改变root目录 vim /etc/locale.gen #删除en_US.UTF-8 和 zh_CN.UTF-8 前面的注释 locale-gen #生成语言区域的一些文件 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime #设置时区为亚洲上海的时区(+08:00)  安装引导程序GRUB pacmanm -S os-prober grub #安装grub及依赖 grub-install --target=i386-pc /dev/sda #BIOS方式 grub-install /dev/sda #EFI方式 grub-mkconfig -o /boot/grub/grub.</description>
+    </item>
+    
+    <item>
+      <title>First</title>
+      <link>https://caijinken.github.io/post/first/</link>
+      <pubDate>Sat, 13 Jul 2019 21:52:48 +0800</pubDate>
+      
+      <guid>https://caijinken.github.io/post/first/</guid>
+      <description> Hello Jingege  aaa bbb ccc  </description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://caijinken.github.io/about/</link>
+      <pubDate>Sat, 13 Jul 2019 21:46:13 +0800</pubDate>
+      
+      <guid>https://caijinken.github.io/about/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
