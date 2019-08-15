@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>docker on *&lt;^_^&gt;*</title>
+    <link>https://caijinken.github.io/tags/docker/</link>
+    <description>Recent content in docker on *&lt;^_^&gt;*</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 14 Aug 2019 19:33:19 +0800</lastBuildDate>
+    
+	<atom:link href="https://caijinken.github.io/tags/docker/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Namespace</title>
+      <link>https://caijinken.github.io/linux/namespace/</link>
+      <pubDate>Wed, 14 Aug 2019 19:33:19 +0800</pubDate>
+      
+      <guid>https://caijinken.github.io/linux/namespace/</guid>
+      <description>简介 linux namespace 是linux内核提供的一种环境（资源）隔离的方式，主要提供了UTS、IPC、network、User、mount、PID的隔离
+   类别 系统调用参数 内核版本 作用     UTS CLONE_NEWUTS Linux 2.6.19 隔离主机名称，域名称   IPC CLONE_NEWIPC Linux 2.6.10 隔离进程间通信   Network CLONE_NEWNET Linux 2.6.29 隔离网络   User CLONE_NEWUSER Linux 3.8 隔离用户   Mount CLONE_NEWNS Linux 2.4.19 隔离挂载点   PID CLONE_NEWPID linux 2.6.24 隔离进程ID    UTC 未隔离之前，我们先看看主机名，打开两个终端，终端1执行hostname，查看当前主机名，第二个终端中执行sudo hostname xxx再在终端1中执行hostname，可以发现主机名称已经被修改了。
+为了能够更好的感受下namespace，自己动手写个程序是最好不过的方式了，下面是我写的一个demo，文件名是namespace.go
+package main import ( &amp;quot;fmt&amp;quot; &amp;quot;os&amp;quot; &amp;quot;os/exec&amp;quot; &amp;quot;syscall&amp;quot; ) func main() { cmd := exec.</description>
+    </item>
+    
+  </channel>
+</rss>
