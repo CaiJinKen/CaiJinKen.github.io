@@ -6,10 +6,21 @@
     <description>Recent content on *&lt;^_^&gt;*</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 16 Aug 2019 21:03:23 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 19 Aug 2019 20:18:42 +0800</lastBuildDate>
     
 	<atom:link href="https://caijinken.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Cgroup</title>
+      <link>https://caijinken.github.io/linux/cgroup/</link>
+      <pubDate>Mon, 19 Aug 2019 20:18:42 +0800</pubDate>
+      
+      <guid>https://caijinken.github.io/linux/cgroup/</guid>
+      <description>简介 Croups(control groups)是Linux内核提供的一种可以限制、记录、隔离进程(进程组)所使用的的物理资源（如：CPU、memory、IO、device等）的机制。是轻量级虚拟化技术（docker、lxc）的基础之一。另外的基础包括namespace、ufs(union file system)等。
+概念  基本概念  任务（task）。在cgroup中，任务就是系统的一个进程。 控制组（control group）。控制组就是一组按照某种标准划分的进程，比如按内存大小，cpu的使用率，或者io的速率限制划分成组。一个进程可以加入到某个控制组，也可以从一个组迁移到另外一个组。一个组中的进程可以使用cgroup以控制组为单位分配的资源，同时受到组分配到的资源的限制。 层级（hierarchy）。控制组可以组织成为层级的形式，组成一棵控制组树。控制组树上的子节点是父节点控制组的孩子，继承父控制组的资源限制。 子系统（subsystem）。一个子系统就是一个资源控制器，子系统必须附加（attach）到一个层级上才能使用。  关系和限制  一个子系统最多只能附加到一个层级。 一个层级可以有多个子系统。 一个任务可以是多个cgroup的成员，但是这些cgroup必须是不同的层级。 任务创建子任务时，子任务自动成为其父任务所在的cgroup成员。可以把子任务移动到不同的cgroup中，但最开始时，它总是继承父任务的cgroup。   系统支持的子系统  查看系统支持的cgroup
+# 1、安装cgroup工具，如果已经安装，请忽略 sudo apt install cgroup-tools # 2、查看系统的子系统 $lssubsys cpuset cpu,cpuacct blkio memory devices freezer net_cls,net_prio perf_event hugetlb pids rdma jin@k53:~$ jin@k53:~$ uname -a Linux k53 5.0.0-25-generic #26-Ubuntu SMP Thu Aug 1 12:04:58 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux jin@k53:~$ lsb_release -a No LSB modules are available.</description>
+    </item>
     
     <item>
       <title>Namespace_Improve</title>
