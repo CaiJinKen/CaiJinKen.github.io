@@ -12,11 +12,11 @@
     
     
     <item>
-      <title>Cgroup_inprove</title>
-      <link>https://caijinken.github.io/linux/cgroup_inprove/</link>
+      <title>Cgroup_subsystem</title>
+      <link>https://caijinken.github.io/linux/cgroup_improve/</link>
       <pubDate>Thu, 22 Aug 2019 21:22:50 +0800</pubDate>
       
-      <guid>https://caijinken.github.io/linux/cgroup_inprove/</guid>
+      <guid>https://caijinken.github.io/linux/cgroup_improve/</guid>
       <description>上一篇cgroup主要讲了cgroup和常用的subsystem，算是理论部分，都说实践出真理，这篇文章就是实践部分了，介绍如何使用。
 subsystem  cpuset
  限制  cpuset.cpus: 设置任务可以使用的CPU核心的编号，格式为：from_number-to_number, number，用,隔开 cpuset.mems: 设置cpu可使用的memory node，格式同上  统计  cpuset.effective_cpus: 在使用的cpu核心 cpuset.effective_mem: 在使用的memory node cpuset.memory_pressure：cupset中的分页   cpu
