@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>golang on *&lt;^_^&gt;*</title>
+    <link>https://caijinken.github.io/tags/golang/</link>
+    <description>Recent content in golang on *&lt;^_^&gt;*</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 10 Apr 2020 20:18:42 +0800</lastBuildDate>
+    
+	<atom:link href="https://caijinken.github.io/tags/golang/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>go get</title>
+      <link>https://caijinken.github.io/linux/go_get/</link>
+      <pubDate>Fri, 10 Apr 2020 20:18:42 +0800</pubDate>
+      
+      <guid>https://caijinken.github.io/linux/go_get/</guid>
+      <description>go get 默认拉取：
+ 拉取最新的release版本 拉取最新的pre-release版本 拉取最新提交的版本  覆盖默认拉取：
+ @version @commit-hash @branch  特殊标记：
+ @none 表明改依赖应该被彻底删除或者降级依赖
+ @latest 明确指明拉取最新的release镜像
+ @upgrade 拉取最新版本，如果已经有比正式版还新的预发行版或者补丁版，则不会降级该依赖
+ @patch 拉取最新补丁版，主版本好和次版本号保持一致
+  如果还没有拉取过依赖的话，@upgrade和@patch的作用和@latest一样</description>
+    </item>
+    
+  </channel>
+</rss>

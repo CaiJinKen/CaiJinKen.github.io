@@ -4,7 +4,36 @@
   
   <url>
     <loc>https://caijinken.github.io/</loc>
-    <lastmod>2019-08-22T21:22:50+08:00</lastmod>
+    <lastmod>2020-04-18T21:24:19+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://caijinken.github.io/front-end/</loc>
+    <lastmod>2020-04-18T21:24:19+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://caijinken.github.io/tags/javascript/</loc>
+    <lastmod>2020-04-18T21:24:19+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://caijinken.github.io/tags/</loc>
+    <lastmod>2020-04-18T21:24:19+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://caijinken.github.io/front-end/axios%E7%9A%84%E4%BD%BF%E7%94%A8/</loc>
+    <lastmod>2020-04-18T21:24:19+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://caijinken.github.io/tags/axis/</loc>
+    <lastmod>2020-04-18T21:24:19+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -22,12 +51,6 @@
   <url>
     <loc>https://caijinken.github.io/linux/cgroup/</loc>
     <lastmod>2019-08-19T20:18:42+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://caijinken.github.io/tags/</loc>
-    <lastmod>2019-08-19T20:18:42+08:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
@@ -55,22 +78,6 @@
   <url>
     <loc>https://caijinken.github.io/linux/arch_install/</loc>
     <lastmod>2019-07-13T22:24:48+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://caijinken.github.io/post/first/</loc>
-    <lastmod>2019-07-13T21:52:48+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://caijinken.github.io/post/</loc>
-    <lastmod>2019-07-13T21:52:48+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://caijinken.github.io/about/</loc>
-    <lastmod>2019-07-13T21:46:13+08:00</lastmod>
   </url>
   
   <url>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>test on *&lt;^_^&gt;*</title>
+    <link>https://caijinken.github.io/tags/test/</link>
+    <description>Recent content in test on *&lt;^_^&gt;*</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 11 Apr 2020 20:18:42 +0800</lastBuildDate>
+    
+	<atom:link href="https://caijinken.github.io/tags/test/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>test</title>
+      <link>https://caijinken.github.io/linux/abcd/</link>
+      <pubDate>Sat, 11 Apr 2020 20:18:42 +0800</pubDate>
+      
+      <guid>https://caijinken.github.io/linux/abcd/</guid>
+      <description>abcd abcd abcd
+a bc d
+a bc d
+abcd
+abc
+```flow st=&amp;gt;start: 开始框 op=&amp;gt;operation: 处理框 cond=&amp;gt;condition: 判断框(是或否?) sub1=&amp;gt;subroutine: 子流程 io=&amp;gt;inputoutput: 输入输出框 e=&amp;gt;end: 结束框 st-&amp;gt;op-&amp;gt;cond cond(yes)-&amp;gt;io-&amp;gt;e cond(no)-&amp;gt;sub1(right)-&amp;gt;op ```  he said:
+ Amazing!!!!
+ You can do this: git status
+some basic git command:
+git status git add git commit  My favorite search site is google
+Check Readme.md
+ first second thered  001 002 0021 0022 003    first second therd  feijjie jifeow  jfeowj jfowej fjeow 111    fewfe ewf fe wjeo  That is so funny!</description>
+    </item>
+    
+  </channel>
+</rss>

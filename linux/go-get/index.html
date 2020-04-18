@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Categories &middot; *&lt;^_^&gt;*</title>
+  <title> &middot; *&lt;^_^&gt;*</title>
 
   
   <link type="text/css" rel="stylesheet" href="https://caijinken.github.io/css/print.css" media="print">
@@ -23,7 +23,6 @@
   <link rel="shortcut icon" href="/favicon.png">
 
   
-  <link href="https://caijinken.github.io/categories/index.xml" rel="alternate" type="application/rss+xml" title="*<^_^>*" />
   
 </head>
 
@@ -49,9 +48,46 @@
 </aside>
 
     <main class="content container">
-    <ul class="posts">
+    <div class="post">
+  <h1></h1>
+  <time datetime=0001-01-01T00:00:00Z class="post-date">Mon, Jan 1, 0001</time>
+  
 
+<h4 id="go-get">go get</h4>
+
+<p>默认拉取：</p>
+
+<ul>
+<li>拉取最新的release版本</li>
+<li>拉取最新的pre-release版本</li>
+<li>拉取最新提交的版本</li>
 </ul>
+
+<p>覆盖默认拉取：</p>
+
+<ul>
+<li>@version</li>
+<li>@commit-hash</li>
+<li>@branch</li>
+</ul>
+
+<p>特殊标记：</p>
+
+<ul>
+<li><p>@none 表明改依赖应该被彻底删除或者降级依赖</p></li>
+
+<li><p>@latest 明确指明拉取最新的release镜像</p></li>
+
+<li><p>@upgrade 拉取最新版本，如果已经有比正式版还新的预发行版或者补丁版，则不会降级该依赖</p></li>
+
+<li><p>@patch 拉取最新补丁版，主版本好和次版本号保持一致</p></li>
+</ul>
+
+<p>如果还没有拉取过依赖的话，@upgrade和@patch的作用和@latest一样</p>
+
+</div>
+
+
     </main>
 
     
