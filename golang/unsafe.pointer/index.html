@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+<head>
+  <link href="//gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="Hugo 0.56.0-DEV" />
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>unsafe.Pointer &middot; *&lt;^_^&gt;*</title>
+
+  
+  <link type="text/css" rel="stylesheet" href="https://caijinken.github.io/css/print.css" media="print">
+  <link type="text/css" rel="stylesheet" href="https://caijinken.github.io/css/poole.css">
+  <link type="text/css" rel="stylesheet" href="https://caijinken.github.io/css/syntax.css">
+  <link type="text/css" rel="stylesheet" href="https://caijinken.github.io/css/hyde.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface|PT+Sans:400,400i,700">
+
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.png">
+
+  
+  
+</head>
+
+  <body class=" ">
+  <aside class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <a href="https://caijinken.github.io/"><h1>*&lt;^_^&gt;*</h1></a>
+      <p class="lead">
+       CaiJin`s site 
+      </p>
+    </div>
+
+    <nav>
+      <ul class="sidebar-nav">
+        <li><a href="https://caijinken.github.io/">Home</a> </li>
+        
+      </ul>
+    </nav>
+
+    <p>&copy; 2020. All rights reserved. </p>
+  </div>
+</aside>
+
+    <main class="content container">
+    <div class="post">
+  <h1>unsafe.Pointer</h1>
+  <time datetime=2020-05-02T20:20:42&#43;0800 class="post-date">Sat, May 2, 2020</time>
+  <p>unsafe.Pointer相当于指向任意类型的指针(*指针)，但它有四种特殊的操作不同于一般的指针：</p>
+
+<ol>
+<li>任意类型的指针(*)可以转换为Pointer</li>
+<li>Pointer指针也可以转换为任意类型的指针</li>
+<li>uintptr可以转换成Pointer</li>
+<li>Pointer可以也可以转换为uintptr</li>
+</ol>
+
+<p>即:</p>
+
+<p>Pointer &lt;&mdash;&gt;(*)</p>
+
+<p>uintptr&lt;&mdash;-&gt; Pointer</p>
+
+<p>Pointer允许程序忽略类型检测从而读写任意的内存，所以在使用unsafe包的时候要格外小心。</p>
+
+<p>比如将float64转化为int64，正常情况下是需要遵守go的类型检测，进行类型强转之后才能正常运行：</p>
+
+<pre><code class="language-go">var (
+  sourceValue float64
+  targetValue int46
+)
+sourceValue = 300.00
+targetValue = int64(sourceValue)
+// targetValue = sourceValue //err: type not match
+</code></pre>
+
+<p>使用示例：</p>
+
+<ul>
+<li><p>将*T1转换为*T2</p>
+
+<pre><code class="language-go">func Float64bits(f float64) uint64{
+return (*uint64)(unsafe.Pointer(&amp;f))
+}
+  
+//unsafe.Pointer(&amp;f)即第一条规则：将任意类型指针转换为Pointer
+//(*uint64)(unsafe.Pointer)即第二条规则：将Pointer转换为任意类型
+</code></pre></li>
+
+<li><p>将Pointer转换为uintptr(取地址值)</p>
+
+<pre><code class="language-go">func Pointer2uintptr(p unsafe.Pointer) uintprt{
+return (uintptr)(p)
+}
+//(uintprt)(unsafe.Pointer)即第三条规则：将Pointer转换为uintptr
+</code></pre></li>
+</ul>
+
+<p><code>Note:</code>一般情况下不要这么用，因为uintptr本质上是整数类型，当Pointer中的指针值变了以后，uintptr的值并不随着原始指针的值变化，这里仅仅只是出于演示的目的这么写，所以别用任何变量保存Pointer转换为uintptr之后的值</p>
+
+<ul>
+<li><p>将指针和偏移做运算以后返回</p>
+
+<pre><code class="language-go">p = unsafe.Pointer(uintptr(p)+offset)
+//offset 是一个整型的值，可以是计算后的，比如
+//对于结构体：
+f = unsafe.Pointer(uintptr(unsafe.Pointer(&amp;s))+unsafe.Offsetof(s.f))
+//上面等同于
+f = unsafe.Pointer(&amp;s.f)
+  
+//对于slice
+e := unsafe.Pointer(uintptr(unsafe.Pointer(&amp;s[i]))+i*unsafe.Sizeof(s[0]))
+//上面等同于
+e := unsafe.Pointer(&amp;s[i])
+</code></pre></li>
+
+<li><p>将reflect.Value.Pointer 或者reflect.Value.UnsafeAddr转换为Pointer</p>
+
+<pre><code class="language-go">p := (*int)(unsafe.Pointer(reflect.ValueOf(new(int)).Pointer()))
+</code></pre></li>
+
+<li><p>通过Pointer将string和slice互换</p></li>
+</ul>
+
+<p>先看下string和slice的底层结构：</p>
+
+<pre><code class="language-go">  type StringHeader struct {
+    Data uintptr
+    Len  int
+  }
+  
+  type SliceHeader struct {
+    Data uintptr
+    Len  int
+    Cap  int
+  }
+</code></pre>
+
+<p>如果slice保存的是字符串的字节数组的话，在底层表现上它和string唯一的区别就是多了Cap（容量）字段。既然结构差不多，其实可以通过Pointer进行互转：</p>
+
+<pre><code class="language-go">  var s string
+  var bts []byte
+  
+  //string to slice
+  sh:=(*reflect.StringHeader)(unsafe.Pointer(&amp;s))
+  bh = (*reflect.SliceHeader)(unsafe.Pointer(&amp;bts))
+  bh.Data,bh.Len,bh.Cap = sh.Data,sh.Len,sh.Len
+  bts = *(*[]byte)(bh)
+  //等同于
+  bh := (*reflect.SliceHeader)(unsafe.Pointer(&amp;s))
+  bh.Len = len(s)
+  bts = *(*[]byte)(bh)
+  
+  //slice to string
+  bh:=(*reflect.SliceHeader)(unsafe.Pointer(&amp;bh))
+  sh:=(*reflect.StringHeader)(unsafe.Pointer(&amp;s))
+  sh.Data,sh.Len = bh.Data,bh.Len
+  //等同于
+  s = *(*string)(unsafe.Pointer(&amp;bts))
+</code></pre>
+
+<p>从上面的几个例子中，我们就可以看的出来，unsafe.Pointer的作用就是在<code>必要</code>的地方作为类型转换的桥梁。</p>
+
+</div>
+
+
+    </main>
+
+    
+  </body>
+</html>
