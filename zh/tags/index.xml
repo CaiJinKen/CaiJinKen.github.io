@@ -1,0 +1,79 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    <title>Tags - tag - *&lt;^_^&gt;*</title>
+    <link>https://caijin.dev/zh/tags/</link>
+    <description>Tags - tag | *&lt;^_^&gt;*</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><copyright>xxxx</copyright><lastBuildDate>Sat, 02 May 2020 20:20:42 &#43;0800</lastBuildDate><atom:link href="https://caijin.dev/zh/tags/" rel="self" type="application/rss+xml" /><item>
+  <title>Golang</title>
+  <link>https://caijin.dev/zh/tags/golang/</link>
+  <pubDate>Sat, 02 May 2020 20:20:42 &#43;0800</pubDate>
+  <author>caijin</author>
+  <guid>https://caijin.dev/zh/tags/golang/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>Others</title>
+  <link>https://caijin.dev/zh/tags/others/</link>
+  <pubDate>Sat, 02 May 2020 20:20:42 &#43;0800</pubDate>
+  <author>caijin</author>
+  <guid>https://caijin.dev/zh/tags/others/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>Redis</title>
+  <link>https://caijin.dev/zh/tags/redis/</link>
+  <pubDate>Sat, 02 May 2020 20:20:42 &#43;0800</pubDate>
+  <author>caijin</author>
+  <guid>https://caijin.dev/zh/tags/redis/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>Kafka</title>
+  <link>https://caijin.dev/zh/tags/kafka/</link>
+  <pubDate>Sat, 02 May 2020 20:18:42 &#43;0800</pubDate>
+  <author>caijin</author>
+  <guid>https://caijin.dev/zh/tags/kafka/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>Mysql</title>
+  <link>https://caijin.dev/zh/tags/mysql/</link>
+  <pubDate>Sat, 02 May 2020 20:18:42 &#43;0800</pubDate>
+  <author>caijin</author>
+  <guid>https://caijin.dev/zh/tags/mysql/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>Axis</title>
+  <link>https://caijin.dev/zh/tags/axis/</link>
+  <pubDate>Sat, 18 Apr 2020 21:24:19 &#43;0800</pubDate>
+  <author>caijin</author>
+  <guid>https://caijin.dev/zh/tags/axis/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>JavaScript</title>
+  <link>https://caijin.dev/zh/tags/javascript/</link>
+  <pubDate>Sat, 18 Apr 2020 21:24:19 &#43;0800</pubDate>
+  <author>caijin</author>
+  <guid>https://caijin.dev/zh/tags/javascript/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>Docker</title>
+  <link>https://caijin.dev/zh/tags/docker/</link>
+  <pubDate>Thu, 22 Aug 2019 21:22:50 &#43;0800</pubDate>
+  <author>caijin</author>
+  <guid>https://caijin.dev/zh/tags/docker/</guid>
+  <description><![CDATA[]]></description>
+</item>
+<item>
+  <title>Linux</title>
+  <link>https://caijin.dev/zh/tags/linux/</link>
+  <pubDate>Thu, 22 Aug 2019 21:22:50 &#43;0800</pubDate>
+  <author>caijin</author>
+  <guid>https://caijin.dev/zh/tags/linux/</guid>
+  <description><![CDATA[]]></description>
+</item>
+</channel>
+</rss>

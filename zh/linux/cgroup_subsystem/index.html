@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Cgroup_subsystem - *&lt;^_^&gt;*</title><meta name="author" content="caijin">
+<meta name="author-link" content="https://caijin.dev">
+<meta name="description" content="上一篇cgroup主要讲了cgroup和常用的subsystem，算是理论部分，都说实践出真理，这篇文章就是实践部分了，介绍如何使用。
+subsystem cpuset
+限制 cpuset.cpus: 设置任务可以使用的CPU核心的编号，格式为：from_number-to_number, number，用,隔开 cpuset.mems: 设置cpu可使用的memory node，格式同上 统计 cpuset.effective_cpus: 在使用的cpu核心 cpuset.effective_mem: 在使用的memory node cpuset.memory_pressure：cupset中的分页 cpu
+限制 cpu.cfs_quota_us: 设定周期内最多可使用的时间 cpu.cfs_period_us: 设置使用cpu的周期时间，需要和cfs_quota_us配合使用 统计 cpu.stat: 显示各种统计信息 cpuacct.stat: 统计用户态和内核态使用的cpu时长 cpuacct.usage_*: 统计每个任务使用的cpu时长 blkio
+限制 blkio.throttle.read_bps_device: 设置读取设备的速率上限，格式为：device_num:node_number byte_per_second blkio.throttle.read_iops_device: 设置每秒读取设备的次数上限 blkio.throttle.write_bps_device: 设置写设备的速率上限 blkio.throttle.write_iops_device: 设置每秒写设备的次数 统计 blkio.reset_stats: 重置统计信息 blkio.throttle.io_service_bytes: 读设备/写设备的字节数 blkio.throttle.*_recursive: 各种统计数据的递归版本。这些文件显示与非递归对应文件相同的信息，但包括来自所有后代cgroup的统计信息 blkio.throttle.io_serviced: io次数 memory
+限制
+memory.limit_in_bytes: 设置内存使用限制，单位有k、m、g，-1时无限制
+memory.max_usage_in_bytes: 设置最大内存使用量
+memory.move_charge_at_immigrate: 设置移动的花费
+memory.soft_limit_in_bytes: 软限制，需要比limit_in_bytes小
+memory.oom_control：改参数填 0 或 1， 0表示开启，当 cgroup 中的进程使用资源超过界限时立即杀死进程，1表示不启用。默认情况下，包含 memory 子系统的 cgroup 都启用" /><meta name="keywords" content='docker, linux' />
+  <meta itemprop="name" content="Cgroup_subsystem">
+  <meta itemprop="description" content="上一篇cgroup主要讲了cgroup和常用的subsystem，算是理论部分，都说实践出真理，这篇文章就是实践部分了，介绍如何使用。
+subsystem cpuset
+限制 cpuset.cpus: 设置任务可以使用的CPU核心的编号，格式为：from_number-to_number, number，用,隔开 cpuset.mems: 设置cpu可使用的memory node，格式同上 统计 cpuset.effective_cpus: 在使用的cpu核心 cpuset.effective_mem: 在使用的memory node cpuset.memory_pressure：cupset中的分页 cpu
+限制 cpu.cfs_quota_us: 设定周期内最多可使用的时间 cpu.cfs_period_us: 设置使用cpu的周期时间，需要和cfs_quota_us配合使用 统计 cpu.stat: 显示各种统计信息 cpuacct.stat: 统计用户态和内核态使用的cpu时长 cpuacct.usage_*: 统计每个任务使用的cpu时长 blkio
+限制 blkio.throttle.read_bps_device: 设置读取设备的速率上限，格式为：device_num:node_number byte_per_second blkio.throttle.read_iops_device: 设置每秒读取设备的次数上限 blkio.throttle.write_bps_device: 设置写设备的速率上限 blkio.throttle.write_iops_device: 设置每秒写设备的次数 统计 blkio.reset_stats: 重置统计信息 blkio.throttle.io_service_bytes: 读设备/写设备的字节数 blkio.throttle.*_recursive: 各种统计数据的递归版本。这些文件显示与非递归对应文件相同的信息，但包括来自所有后代cgroup的统计信息 blkio.throttle.io_serviced: io次数 memory
+限制
+memory.limit_in_bytes: 设置内存使用限制，单位有k、m、g，-1时无限制
+memory.max_usage_in_bytes: 设置最大内存使用量
+memory.move_charge_at_immigrate: 设置移动的花费
+memory.soft_limit_in_bytes: 软限制，需要比limit_in_bytes小
+memory.oom_control：改参数填 0 或 1， 0表示开启，当 cgroup 中的进程使用资源超过界限时立即杀死进程，1表示不启用。默认情况下，包含 memory 子系统的 cgroup 都启用">
+  <meta itemprop="datePublished" content="2019-08-22T21:22:50+08:00">
+  <meta itemprop="dateModified" content="2019-08-22T21:22:50+08:00">
+  <meta itemprop="wordCount" content="368">
+  <meta itemprop="keywords" content="Docker,Linux"><meta property="og:url" content="https://caijin.dev/zh/linux/cgroup_subsystem/">
+  <meta property="og:site_name" content="*&lt;^_^&gt;*">
+  <meta property="og:title" content="Cgroup_subsystem">
+  <meta property="og:description" content="上一篇cgroup主要讲了cgroup和常用的subsystem，算是理论部分，都说实践出真理，这篇文章就是实践部分了，介绍如何使用。
+subsystem cpuset
+限制 cpuset.cpus: 设置任务可以使用的CPU核心的编号，格式为：from_number-to_number, number，用,隔开 cpuset.mems: 设置cpu可使用的memory node，格式同上 统计 cpuset.effective_cpus: 在使用的cpu核心 cpuset.effective_mem: 在使用的memory node cpuset.memory_pressure：cupset中的分页 cpu
+限制 cpu.cfs_quota_us: 设定周期内最多可使用的时间 cpu.cfs_period_us: 设置使用cpu的周期时间，需要和cfs_quota_us配合使用 统计 cpu.stat: 显示各种统计信息 cpuacct.stat: 统计用户态和内核态使用的cpu时长 cpuacct.usage_*: 统计每个任务使用的cpu时长 blkio
+限制 blkio.throttle.read_bps_device: 设置读取设备的速率上限，格式为：device_num:node_number byte_per_second blkio.throttle.read_iops_device: 设置每秒读取设备的次数上限 blkio.throttle.write_bps_device: 设置写设备的速率上限 blkio.throttle.write_iops_device: 设置每秒写设备的次数 统计 blkio.reset_stats: 重置统计信息 blkio.throttle.io_service_bytes: 读设备/写设备的字节数 blkio.throttle.*_recursive: 各种统计数据的递归版本。这些文件显示与非递归对应文件相同的信息，但包括来自所有后代cgroup的统计信息 blkio.throttle.io_serviced: io次数 memory
+限制
+memory.limit_in_bytes: 设置内存使用限制，单位有k、m、g，-1时无限制
+memory.max_usage_in_bytes: 设置最大内存使用量
+memory.move_charge_at_immigrate: 设置移动的花费
+memory.soft_limit_in_bytes: 软限制，需要比limit_in_bytes小
+memory.oom_control：改参数填 0 或 1， 0表示开启，当 cgroup 中的进程使用资源超过界限时立即杀死进程，1表示不启用。默认情况下，包含 memory 子系统的 cgroup 都启用">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="linux">
+    <meta property="article:published_time" content="2019-08-22T21:22:50+08:00">
+    <meta property="article:modified_time" content="2019-08-22T21:22:50+08:00">
+    <meta property="article:tag" content="Docker">
+    <meta property="article:tag" content="Linux">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cgroup_subsystem">
+  <meta name="twitter:description" content="上一篇cgroup主要讲了cgroup和常用的subsystem，算是理论部分，都说实践出真理，这篇文章就是实践部分了，介绍如何使用。
+subsystem cpuset
+限制 cpuset.cpus: 设置任务可以使用的CPU核心的编号，格式为：from_number-to_number, number，用,隔开 cpuset.mems: 设置cpu可使用的memory node，格式同上 统计 cpuset.effective_cpus: 在使用的cpu核心 cpuset.effective_mem: 在使用的memory node cpuset.memory_pressure：cupset中的分页 cpu
+限制 cpu.cfs_quota_us: 设定周期内最多可使用的时间 cpu.cfs_period_us: 设置使用cpu的周期时间，需要和cfs_quota_us配合使用 统计 cpu.stat: 显示各种统计信息 cpuacct.stat: 统计用户态和内核态使用的cpu时长 cpuacct.usage_*: 统计每个任务使用的cpu时长 blkio
+限制 blkio.throttle.read_bps_device: 设置读取设备的速率上限，格式为：device_num:node_number byte_per_second blkio.throttle.read_iops_device: 设置每秒读取设备的次数上限 blkio.throttle.write_bps_device: 设置写设备的速率上限 blkio.throttle.write_iops_device: 设置每秒写设备的次数 统计 blkio.reset_stats: 重置统计信息 blkio.throttle.io_service_bytes: 读设备/写设备的字节数 blkio.throttle.*_recursive: 各种统计数据的递归版本。这些文件显示与非递归对应文件相同的信息，但包括来自所有后代cgroup的统计信息 blkio.throttle.io_serviced: io次数 memory
+限制
+memory.limit_in_bytes: 设置内存使用限制，单位有k、m、g，-1时无限制
+memory.max_usage_in_bytes: 设置最大内存使用量
+memory.move_charge_at_immigrate: 设置移动的花费
+memory.soft_limit_in_bytes: 软限制，需要比limit_in_bytes小
+memory.oom_control：改参数填 0 或 1， 0表示开启，当 cgroup 中的进程使用资源超过界限时立即杀死进程，1表示不启用。默认情况下，包含 memory 子系统的 cgroup 都启用">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://caijin.dev/zh/linux/cgroup_subsystem/" /><link rel="prev" href="https://caijin.dev/zh/linux/cgroup/" /><link rel="next" href="https://caijin.dev/zh/front-end/axios%E7%9A%84%E4%BD%BF%E7%94%A8/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Cgroup_subsystem",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/caijin.dev\/zh\/linux\/cgroup_subsystem\/"
+    },"genre": "posts","keywords": "docker, linux","wordcount":  368 ,
+    "url": "https:\/\/caijin.dev\/zh\/linux\/cgroup_subsystem\/","datePublished": "2019-08-22T21:22:50+08:00","dateModified": "2019-08-22T21:22:50+08:00","license": "xxxx","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "caijin"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/zh/" title="*&lt;^_^&gt;*"><span class="header-title-text">*&lt;^_^&gt;*</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/zh/"
+                
+                
+              >文档</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/zh/categories/"
+                
+                
+              >分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/zh/tags/"
+                
+                
+              >标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="https://github.com/CaiJinKen"
+                
+                rel="noopener noreferrer" target="_blank"
+              ><i class="fa fa-heart" style="color:red"></i> github</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li><li class="menu-item language-switch">
+            <span role="button" aria-label="" title=""><i class="fa-solid fa-language fa-fw" aria-hidden="true"></i></span>
+            <ul class="sub-menu"><li class="menu-item"></li></ul>
+          </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/zh/" title="*&lt;^_^&gt;*"><span class="header-title-text">*&lt;^_^&gt;*</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/zh/"
+                  
+                  
+                >文档</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/zh/categories/"
+                  
+                  
+                >分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/zh/tags/"
+                  
+                  
+                >标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="https://github.com/CaiJinKen"
+                  
+                  rel="noopener noreferrer" target="_blank"
+                ><i class="fa fa-heart" style="color:red"></i> github</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title=""><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span><span class="menu-system-item language-switch">
+              <span role="button" aria-label="" title="">简体中文<i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden="true"></i></span>
+              <select class="language-select" onchange="location = this.value;"><option disabled></option></select>
+            </span></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label=""></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Cgroup_subsystem</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://caijin.dev"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://avatars.githubusercontent.com/u/36183188?s=400&amp;u=69ec665b3e4ffcc40a98072d56fbaa5b044c5968&amp;v=4" alt="caijin" data-title="caijin" width="20" height="20" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;caijin</a></span><span class="post-included-in">&nbsp;</span></div><div class="post-meta-line"><span title=""><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2019-08-22">2019-08-22</time></span>&nbsp;<span title=""><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i></span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i></span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span></span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#subsystem">subsystem</a></li>
+        <li><a href="#示例">示例</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>上一篇<a href="https://caijinken.github.io/linux/cgroup/"target="_blank" rel="external nofollow noopener noreferrer">cgroup</a>主要讲了cgroup和常用的subsystem，算是理论部分，都说实践出真理，这篇文章就是实践部分了，介绍如何使用。</p>
+<h3 id="subsystem" class="heading-element"><span>subsystem</span>
+  <a href="#subsystem" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><ol>
+<li>
+<p>cpuset</p>
+<ul>
+<li>限制
+<ul>
+<li>cpuset.cpus: 设置任务可以使用的CPU核心的编号，格式为：from_number-to_number, number，用<code>,</code>隔开</li>
+<li>cpuset.mems:  设置cpu可使用的memory node，格式同上</li>
+</ul>
+</li>
+<li>统计
+<ul>
+<li>cpuset.effective_cpus: 在使用的cpu核心</li>
+<li>cpuset.effective_mem: 在使用的memory node</li>
+<li>cpuset.memory_pressure：cupset中的分页</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>cpu</p>
+<ul>
+<li>限制
+<ul>
+<li>cpu.cfs_quota_us: 设定周期内最多可使用的时间</li>
+<li>cpu.cfs_period_us: 设置使用cpu的周期时间，需要和cfs_quota_us配合使用</li>
+</ul>
+</li>
+<li>统计
+<ul>
+<li>cpu.stat: 显示各种统计信息</li>
+<li>cpuacct.stat: 统计用户态和内核态使用的cpu时长</li>
+<li>cpuacct.usage_*:  统计每个任务使用的cpu时长</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>blkio</p>
+<ul>
+<li>限制
+<ul>
+<li>blkio.throttle.read_bps_device: 设置读取设备的速率上限，格式为：device_num:node_number byte_per_second</li>
+<li>blkio.throttle.read_iops_device: 设置每秒读取设备的次数上限</li>
+<li>blkio.throttle.write_bps_device: 设置写设备的速率上限</li>
+<li>blkio.throttle.write_iops_device: 设置每秒写设备的次数</li>
+</ul>
+</li>
+<li>统计
+<ul>
+<li>blkio.reset_stats: 重置统计信息</li>
+<li>blkio.throttle.io_service_bytes: 读设备/写设备的字节数</li>
+<li>blkio.throttle.*_recursive: 各种统计数据的递归版本。这些文件显示与非递归对应文件相同的信息，但包括来自所有后代cgroup的统计信息</li>
+<li>blkio.throttle.io_serviced: io次数</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>memory</p>
+<ul>
+<li>
+<p>限制</p>
+<ul>
+<li>
+<p>memory.limit_in_bytes: 设置内存使用限制，单位有k、m、g，-1时无限制</p>
+</li>
+<li>
+<p>memory.max_usage_in_bytes: 设置最大内存使用量</p>
+</li>
+<li>
+<p>memory.move_charge_at_immigrate: 设置移动的花费</p>
+</li>
+<li>
+<p>memory.soft_limit_in_bytes: 软限制，需要比limit_in_bytes小</p>
+</li>
+<li>
+<p>memory.oom_control：改参数填 0 或 1， <code>0</code>表示开启，当 cgroup 中的进程使用资源超过界限时立即杀死进程，<code>1</code>表示不启用。默认情况下，包含 memory 子系统的 cgroup 都启用</p>
+</li>
+<li>
+<p>memory.kmem.limit_in_bytes: 设置内核使用的内存使用限制</p>
+</li>
+<li>
+<p>memory.kmem.max_usage_in_bytes: 设置内核使用的最大内存限制</p>
+</li>
+<li>
+<p>memory.kmem.tcp.limit_in_bytes: 设置tcp buf内存的硬限制</p>
+</li>
+<li>
+<p>memory.kmem.tcp.max_usage_in_bytes: 设置tcp buf使用的最大内存</p>
+</li>
+</ul>
+</li>
+<li>
+<p>统计</p>
+<ul>
+<li>memory.stat: 显示各种统计数据</li>
+<li>memory.usage_in_bytes: 显示内存的当前使用情况</li>
+<li>memory.numa_stat: 显示每个numa节点的内存使用量</li>
+<li>memory.kmem.usage_in_bytes: 显示当前内核内存分配</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>devices</p>
+<ul>
+<li>限制
+<ul>
+<li>devices.allow: 允许使用的设备，语法：device_type device_number:node_number access_type。device type有三种：b（块设备）、c（字符设备）、a（全部）；access type也有三种：r（读）、w（写）、m（创建）</li>
+<li>devices.deny: 禁止使用的设备，语法同上。</li>
+</ul>
+</li>
+<li>统计
+<ul>
+<li>devices.list: 这个 cgroup 中的task 设定访问控制的设备</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="示例" class="heading-element"><span>示例</span>
+  <a href="#%e7%a4%ba%e4%be%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><ol>
+<li>
+<p>限制任务使用的cpu核心</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@k53:~# mkdir /sys/fs/cgroup/cpuset/cgroup-test
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#可以使用符号-指定范围，比如1-5,8就是1,2,3,4,5,8这几个核心，因为在我虚拟机中只有1核，如果输入的范围有错误的话，会有“write error: Numerical result out of range”错误提示</span>
+</span></span><span style="display:flex;"><span>root@k53:~# echo <span style="color:#e6db74">&#39;1&#39;</span>&gt;/sys/fs/cgroup/cpuset/cgroup-test/cpuset.cpus
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 将进程pid xxx加入任务中，则xxx最多就只能使用1核心，每次只能加一个</span>
+</span></span><span style="display:flex;"><span>root@k53:~# echo xxx&gt;&gt;/sys/fs/cgroup/cpuset/cgroup-test/tasks</span></span></code></pre></div></li>
+<li>
+<p>限制任务使用的cpu周期</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@k53:~# mkdir /sys/fs/cgroup/cpu/cgroup-test
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#数值范围是1000 - 1000,000，即0.1% - 100%</span>
+</span></span><span style="display:flex;"><span>root@k53:~# echo <span style="color:#e6db74">&#39;20000&#39;</span>&gt;/sys/fs/cgroup/cpu/cgroup-test/cpu.cfs_quota_us 
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 将进程pid xxx加入任务中，则xxx最多只能使用20%的cpu周期</span>
+</span></span><span style="display:flex;"><span>root@k53:~# echo xxx&gt;/sys/fs/cgroup/cpu/cgroup-test/tasks</span></span></code></pre></div></li>
+<li>
+<p>限制任务使用的块设备速率</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@k53:~# mkdir /sys/fs/cgroup/blkio/cgroup-test
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置写磁盘的速率最高为2000b/s</span>
+</span></span><span style="display:flex;"><span>root@k53:~# echo <span style="color:#e6db74">&#39;8:0 2000&#39;</span>&gt;/sys/fs/cgroup/blkio/cgroup-test/blkio.throttle.write_bps_device 
+</span></span><span style="display:flex;"><span>root@k53:~# echo xxx&gt;/sys/fs/cgroup/blkio/cgroup-test/tasks</span></span></code></pre></div><p>查看主设备号和次设备号的方法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 查看设备信息</span>
+</span></span><span style="display:flex;"><span>jin@k53:~$ cat /proc/devices 
+</span></span><span style="display:flex;"><span>Character devices:
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">1</span> mem
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">4</span> /dev/vc/0
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">4</span> tty
+</span></span><span style="display:flex;"><span>  .........
+</span></span><span style="display:flex;"><span>Block devices:
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">7</span> loop
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">8</span> sd
+</span></span><span style="display:flex;"><span>  <span style="color:#ae81ff">9</span> md
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">11</span> sr
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">65</span> sd
+</span></span><span style="display:flex;"><span>  .........
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#查看设备主次编号，第五列和第六列分别为设备的主编号和次编号</span>
+</span></span><span style="display:flex;"><span>jin@k53:~$ ls -l /dev
+</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>brw-rw---- <span style="color:#ae81ff">1</span> root    disk      8,   <span style="color:#ae81ff">1</span> Aug <span style="color:#ae81ff">23</span> 05:14 sda1
+</span></span><span style="display:flex;"><span>brw-rw---- <span style="color:#ae81ff">1</span> root    disk      8,   <span style="color:#ae81ff">2</span> Aug <span style="color:#ae81ff">23</span> 05:14 sda2
+</span></span><span style="display:flex;"><span>crw-r--r-- <span style="color:#ae81ff">1</span> root    root     10, <span style="color:#ae81ff">235</span> Aug <span style="color:#ae81ff">23</span> 05:14 autofs
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">2</span> root    root         <span style="color:#ae81ff">280</span> Aug <span style="color:#ae81ff">23</span> 05:14 block
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">2</span> root    root          <span style="color:#ae81ff">80</span> Aug <span style="color:#ae81ff">23</span> 05:14 bsg
+</span></span><span style="display:flex;"><span>crw-rw---- <span style="color:#ae81ff">1</span> root    disk     10, <span style="color:#ae81ff">234</span> Aug <span style="color:#ae81ff">23</span> 05:14 btrfs-control
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">3</span> root    root          <span style="color:#ae81ff">60</span> Aug <span style="color:#ae81ff">23</span> 05:14 bus
+</span></span><span style="display:flex;"><span>lrwxrwxrwx <span style="color:#ae81ff">1</span> root    root           <span style="color:#ae81ff">3</span> Aug <span style="color:#ae81ff">23</span> 05:14 cdrom -&gt; sr0
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">2</span> root    root        <span style="color:#ae81ff">3680</span> Aug <span style="color:#ae81ff">23</span> 05:14 char
+</span></span><span style="display:flex;"><span>crw------- <span style="color:#ae81ff">1</span> root    root      5,   <span style="color:#ae81ff">1</span> Aug <span style="color:#ae81ff">23</span> 05:14 console
+</span></span><span style="display:flex;"><span>lrwxrwxrwx <span style="color:#ae81ff">1</span> root    root          <span style="color:#ae81ff">11</span> Aug <span style="color:#ae81ff">23</span> 05:14 core -&gt; /proc/kcore
+</span></span><span style="display:flex;"><span>crw------- <span style="color:#ae81ff">1</span> root    root     10,  <span style="color:#ae81ff">58</span> Aug <span style="color:#ae81ff">23</span> 05:14 cpu_dma_latency
+</span></span><span style="display:flex;"><span>crw------- <span style="color:#ae81ff">1</span> root    root     10, <span style="color:#ae81ff">203</span> Aug <span style="color:#ae81ff">23</span> 05:14 cuse
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">7</span> root    root         <span style="color:#ae81ff">140</span> Aug <span style="color:#ae81ff">23</span> 05:14 disk
+</span></span><span style="display:flex;"><span>drwxr-xr-x <span style="color:#ae81ff">3</span> root    root         <span style="color:#ae81ff">100</span> Aug <span style="color:#ae81ff">23</span> 05:14 dri</span></span></code></pre></div></li>
+<li>
+<p>限制任务使用的内存</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@k53:~# mkdir /sys/fs/cgroup/memory/cgroup-test
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置最多只能使用100m内存，单位可以为k，m，g</span>
+</span></span><span style="display:flex;"><span>root@k53:~# echo 100m&gt;/sys/fs/cgroup/memory/cgroup-test/memory.limit_in_bytes
+</span></span><span style="display:flex;"><span>root@k53:~# 
+</span></span><span style="display:flex;"><span>root@k53:~# echo xxx&gt;/sys/fs/cgroup/memory/cgroup-test/tasks</span></span></code></pre></div></li>
+<li>
+<p>设置任务设备黑/白名单</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>root@k53:~# mkdir /sys/fs/cgroup/devices/cgroup-test
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 禁止任务写入sda2(8:2)数据</span>
+</span></span><span style="display:flex;"><span>oot@k53:~# echo b 8:2 w&gt;/sys/fs/cgroup/devices/cgroup-test/devices.deny 
+</span></span><span style="display:flex;"><span>root@k53:~# 
+</span></span><span style="display:flex;"><span>root@k53:~# echo xxx&gt;/sys/fs/cgroup/devices/cgroup-test/tasks</span></span></code></pre></div></li>
+</ol>
+<p>参考资料：</p>
+<p><a href="https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v1/index.html"target="_blank" rel="external nofollow noopener noreferrer">cgroup简介</a></p>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="">&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title=" X" data-sharer="twitter" data-url="https://caijin.dev/zh/linux/cgroup_subsystem/" data-title="Cgroup_subsystem" data-hashtags="docker,linux"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title=" Facebook" data-sharer="facebook" data-url="https://caijin.dev/zh/linux/cgroup_subsystem/" data-hashtag="docker"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title=" 微博" data-sharer="weibo" data-url="https://caijin.dev/zh/linux/cgroup_subsystem/" data-title="Cgroup_subsystem"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/zh/tags/docker/" class="post-tag" title=" - Docker">Docker</a><a href="/zh/tags/linux/" class="post-tag" title=" - Linux">Linux</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();"></a></span>&nbsp;|&nbsp;<span><a href="/zh/"></a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/zh/linux/cgroup/" class="post-nav-item" rel="prev" title="Cgroup"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Cgroup</a>
+      <a href="/zh/front-end/axios%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-nav-item" rel="next" title="Axios的使用">Axios的使用<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label=""><h2 class="toc-title">&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered order-2">
+        </div><div class="footer-line copyright order-1" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://caijin.dev"target="_blank" rel="external nofollow noopener noreferrer">caijin</a></span><span class="license footer-divider">MIT</span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label=""><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning"></div>
+  </noscript>
+</div><link rel="preload" href="/lib/katex/katex.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.css"></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/katex/katex.min.js" defer></script><script src="/lib/katex/auto-render.min.js" defer></script><script src="/lib/katex/copy-tex.min.js" defer></script><script src="/lib/katex/mhchem.min.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/flyfish.js" defer></script><script>window.config={"code":{"copyTitle":"","editLockTitle":"","editUnLockTitle":"","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"","link":"","message":""},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"version":"v0.3.9"};</script><script src="/js/theme.min.js" defer></script></body>
+</html>

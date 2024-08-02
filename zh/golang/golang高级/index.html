@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Golang高级001 - *&lt;^_^&gt;*</title><meta name="author" content="caijin">
+<meta name="author-link" content="https://caijin.dev">
+<meta name="description" content=" CSP模型，goroutine调度
+csp并发模型：csp并发模型不同于一般的多线程通过共享内存进行通信的方式，而是采用“通过通信进行共享，而不是通过共享进行通信”，用于多个独立并发的实体通过共享通信的channel进行通信的并发模型。csp中channel是第一类对象，它不关注发送消息的实体，而是关注发送消息时使用的channel。
+goroutine调度：
+M：内核线程
+P：cpu的一个核
+G：goroutine
+控制并发的方式
+通过channel进行并发控制 通过sync包的WaitGroup进行并发控制 通过context进行并发控制 GC
+gc算法：三色标记法（标记-清除）
+流出如下：
+初始把所有对象标记为白色 从全局变量和栈变量作为GC root，开始找到所有可达对象，标记为灰色，放入待处理队列 遍历灰色对象队列，将其引用的对象标记为灰色放入队列，自身标记为黑色，并从队列中删除 循环往复上一步，直到灰色队列为空 剩余的白色对象即为垃圾对象，执行清理工作 触发GC的条件：
+辅助GC：分配内存时，会判断当前heap内存分配量是否达到触发一轮GC的阀值（每轮GC完成后，阀值会被动态设置），如果超过阀值，则启动一轮GC 显式调用runtime.GC()强制启动一轮GC sysmon是运行时的守护进程，当超过 forcegcperiod (2分钟)没有运行GC会启动一轮GC " /><meta name="keywords" content='golang' />
+  <meta itemprop="name" content="golang高级001">
+  <meta itemprop="description" content=" CSP模型，goroutine调度
+csp并发模型：csp并发模型不同于一般的多线程通过共享内存进行通信的方式，而是采用“通过通信进行共享，而不是通过共享进行通信”，用于多个独立并发的实体通过共享通信的channel进行通信的并发模型。csp中channel是第一类对象，它不关注发送消息的实体，而是关注发送消息时使用的channel。
+goroutine调度：
+M：内核线程
+P：cpu的一个核
+G：goroutine
+控制并发的方式
+通过channel进行并发控制 通过sync包的WaitGroup进行并发控制 通过context进行并发控制 GC
+gc算法：三色标记法（标记-清除）
+流出如下：
+初始把所有对象标记为白色 从全局变量和栈变量作为GC root，开始找到所有可达对象，标记为灰色，放入待处理队列 遍历灰色对象队列，将其引用的对象标记为灰色放入队列，自身标记为黑色，并从队列中删除 循环往复上一步，直到灰色队列为空 剩余的白色对象即为垃圾对象，执行清理工作 触发GC的条件：
+辅助GC：分配内存时，会判断当前heap内存分配量是否达到触发一轮GC的阀值（每轮GC完成后，阀值会被动态设置），如果超过阀值，则启动一轮GC 显式调用runtime.GC()强制启动一轮GC sysmon是运行时的守护进程，当超过 forcegcperiod (2分钟)没有运行GC会启动一轮GC ">
+  <meta itemprop="datePublished" content="2019-08-14T19:33:19+08:00">
+  <meta itemprop="dateModified" content="2019-08-14T19:33:19+08:00">
+  <meta itemprop="wordCount" content="25">
+  <meta itemprop="keywords" content="Golang"><meta property="og:url" content="https://caijin.dev/zh/golang/golang%E9%AB%98%E7%BA%A7/">
+  <meta property="og:site_name" content="*&lt;^_^&gt;*">
+  <meta property="og:title" content="golang高级001">
+  <meta property="og:description" content=" CSP模型，goroutine调度
+csp并发模型：csp并发模型不同于一般的多线程通过共享内存进行通信的方式，而是采用“通过通信进行共享，而不是通过共享进行通信”，用于多个独立并发的实体通过共享通信的channel进行通信的并发模型。csp中channel是第一类对象，它不关注发送消息的实体，而是关注发送消息时使用的channel。
+goroutine调度：
+M：内核线程
+P：cpu的一个核
+G：goroutine
+控制并发的方式
+通过channel进行并发控制 通过sync包的WaitGroup进行并发控制 通过context进行并发控制 GC
+gc算法：三色标记法（标记-清除）
+流出如下：
+初始把所有对象标记为白色 从全局变量和栈变量作为GC root，开始找到所有可达对象，标记为灰色，放入待处理队列 遍历灰色对象队列，将其引用的对象标记为灰色放入队列，自身标记为黑色，并从队列中删除 循环往复上一步，直到灰色队列为空 剩余的白色对象即为垃圾对象，执行清理工作 触发GC的条件：
+辅助GC：分配内存时，会判断当前heap内存分配量是否达到触发一轮GC的阀值（每轮GC完成后，阀值会被动态设置），如果超过阀值，则启动一轮GC 显式调用runtime.GC()强制启动一轮GC sysmon是运行时的守护进程，当超过 forcegcperiod (2分钟)没有运行GC会启动一轮GC ">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="golang">
+    <meta property="article:published_time" content="2019-08-14T19:33:19+08:00">
+    <meta property="article:modified_time" content="2019-08-14T19:33:19+08:00">
+    <meta property="article:tag" content="Golang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="golang高级001">
+  <meta name="twitter:description" content=" CSP模型，goroutine调度
+csp并发模型：csp并发模型不同于一般的多线程通过共享内存进行通信的方式，而是采用“通过通信进行共享，而不是通过共享进行通信”，用于多个独立并发的实体通过共享通信的channel进行通信的并发模型。csp中channel是第一类对象，它不关注发送消息的实体，而是关注发送消息时使用的channel。
+goroutine调度：
+M：内核线程
+P：cpu的一个核
+G：goroutine
+控制并发的方式
+通过channel进行并发控制 通过sync包的WaitGroup进行并发控制 通过context进行并发控制 GC
+gc算法：三色标记法（标记-清除）
+流出如下：
+初始把所有对象标记为白色 从全局变量和栈变量作为GC root，开始找到所有可达对象，标记为灰色，放入待处理队列 遍历灰色对象队列，将其引用的对象标记为灰色放入队列，自身标记为黑色，并从队列中删除 循环往复上一步，直到灰色队列为空 剩余的白色对象即为垃圾对象，执行清理工作 触发GC的条件：
+辅助GC：分配内存时，会判断当前heap内存分配量是否达到触发一轮GC的阀值（每轮GC完成后，阀值会被动态设置），如果超过阀值，则启动一轮GC 显式调用runtime.GC()强制启动一轮GC sysmon是运行时的守护进程，当超过 forcegcperiod (2分钟)没有运行GC会启动一轮GC ">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://caijin.dev/zh/golang/golang%E9%AB%98%E7%BA%A7/" /><link rel="prev" href="https://caijin.dev/zh/golang/golang-%E9%AB%98%E7%BA%A7/" /><link rel="next" href="https://caijin.dev/zh/linux/namespace_improve/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "golang高级001",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/caijin.dev\/zh\/golang\/golang%E9%AB%98%E7%BA%A7\/"
+    },"genre": "posts","keywords": "golang","wordcount":  25 ,
+    "url": "https:\/\/caijin.dev\/zh\/golang\/golang%E9%AB%98%E7%BA%A7\/","datePublished": "2019-08-14T19:33:19+08:00","dateModified": "2019-08-14T19:33:19+08:00","license": "xxxx","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "caijin"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/zh/" title="*&lt;^_^&gt;*"><span class="header-title-text">*&lt;^_^&gt;*</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/zh/"
+                
+                
+              >文档</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/zh/categories/"
+                
+                
+              >分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/zh/tags/"
+                
+                
+              >标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="https://github.com/CaiJinKen"
+                
+                rel="noopener noreferrer" target="_blank"
+              ><i class="fa fa-heart" style="color:red"></i> github</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li><li class="menu-item language-switch">
+            <span role="button" aria-label="" title=""><i class="fa-solid fa-language fa-fw" aria-hidden="true"></i></span>
+            <ul class="sub-menu"><li class="menu-item"></li></ul>
+          </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/zh/" title="*&lt;^_^&gt;*"><span class="header-title-text">*&lt;^_^&gt;*</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/zh/"
+                  
+                  
+                >文档</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/zh/categories/"
+                  
+                  
+                >分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/zh/tags/"
+                  
+                  
+                >标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="https://github.com/CaiJinKen"
+                  
+                  rel="noopener noreferrer" target="_blank"
+                ><i class="fa fa-heart" style="color:red"></i> github</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title=""><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span><span class="menu-system-item language-switch">
+              <span role="button" aria-label="" title="">简体中文<i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden="true"></i></span>
+              <select class="language-select" onchange="location = this.value;"><option disabled></option></select>
+            </span></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label=""></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Golang高级001</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://caijin.dev"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://avatars.githubusercontent.com/u/36183188?s=400&amp;u=69ec665b3e4ffcc40a98072d56fbaa5b044c5968&amp;v=4" alt="caijin" data-title="caijin" width="20" height="20" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;caijin</a></span><span class="post-included-in">&nbsp;</span></div><div class="post-meta-line"><span title=""><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2019-08-14">2019-08-14</time></span>&nbsp;<span title=""><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i></span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i></span>&nbsp;</div>
+    </div><div class="content" id="content"><ol>
+<li>
+<p>CSP模型，goroutine调度</p>
+<p>csp并发模型：csp并发模型不同于一般的多线程通过共享内存进行通信的方式，而是采用“通过通信进行共享，而不是通过共享进行通信”，用于多个独立并发的实体通过共享通信的channel进行通信的并发模型。csp中channel是第一类对象，它不关注发送消息的实体，而是关注发送消息时使用的channel。</p>
+<p>goroutine调度：</p>
+<p>M：内核线程</p>
+<p>P：cpu的一个核</p>
+<p>G：goroutine</p>
+</li>
+<li>
+<p>控制并发的方式</p>
+<ul>
+<li>通过channel进行并发控制</li>
+<li>通过sync包的WaitGroup进行并发控制</li>
+<li>通过context进行并发控制</li>
+</ul>
+</li>
+<li>
+<p>GC</p>
+<ul>
+<li>
+<p>gc算法：三色标记法（标记-清除）</p>
+<p>流出如下：</p>
+<ul>
+<li>初始把所有对象标记为白色</li>
+<li>从全局变量和栈变量作为GC root，开始找到所有可达对象，标记为灰色，放入待处理队列</li>
+<li>遍历灰色对象队列，将其引用的对象标记为灰色放入队列，自身标记为黑色，并从队列中删除</li>
+<li>循环往复上一步，直到灰色队列为空</li>
+<li>剩余的白色对象即为垃圾对象，执行清理工作</li>
+</ul>
+</li>
+<li>
+<p>触发GC的条件：</p>
+<ul>
+<li>辅助GC：分配内存时，会判断当前heap内存分配量是否达到触发一轮GC的阀值（每轮GC完成后，阀值会被动态设置），如果超过阀值，则启动一轮GC</li>
+<li>显式调用runtime.GC()强制启动一轮GC</li>
+<li>sysmon是运行时的守护进程，当超过 forcegcperiod (2分钟)没有运行GC会启动一轮GC</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="">&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title=" X" data-sharer="twitter" data-url="https://caijin.dev/zh/golang/golang%E9%AB%98%E7%BA%A7/" data-title="Golang高级001" data-hashtags="golang"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title=" Facebook" data-sharer="facebook" data-url="https://caijin.dev/zh/golang/golang%E9%AB%98%E7%BA%A7/" data-hashtag="golang"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title=" 微博" data-sharer="weibo" data-url="https://caijin.dev/zh/golang/golang%E9%AB%98%E7%BA%A7/" data-title="Golang高级001"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/zh/tags/golang/" class="post-tag" title=" - Golang">Golang</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();"></a></span>&nbsp;|&nbsp;<span><a href="/zh/"></a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/zh/golang/golang-%E9%AB%98%E7%BA%A7/" class="post-nav-item" rel="prev" title="Golang高级002"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Golang高级002</a>
+      <a href="/zh/linux/namespace_improve/" class="post-nav-item" rel="next" title="Namespace_Improve">Namespace_Improve<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label=""></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered order-2">
+        </div><div class="footer-line copyright order-1" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://caijin.dev"target="_blank" rel="external nofollow noopener noreferrer">caijin</a></span><span class="license footer-divider">MIT</span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label=""><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning"></div>
+  </noscript>
+</div><link rel="preload" href="/lib/katex/katex.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.css"></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/katex/katex.min.js" defer></script><script src="/lib/katex/auto-render.min.js" defer></script><script src="/lib/katex/copy-tex.min.js" defer></script><script src="/lib/katex/mhchem.min.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/flyfish.js" defer></script><script>window.config={"code":{"copyTitle":"","editLockTitle":"","editUnLockTitle":"","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"","link":"","message":""},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"version":"v0.3.9"};</script><script src="/js/theme.min.js" defer></script></body>
+</html>

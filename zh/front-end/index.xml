@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Front-Ends on *&lt;^_^&gt;*</title>
+    <link>https://caijin.dev/zh/front-end/</link>
+    <description>Recent content in Front-Ends on *&lt;^_^&gt;*</description>
+    <generator>Hugo</generator>
+    <language>zh-CN</language>
+    <copyright>xxxx</copyright>
+    <lastBuildDate>Sat, 18 Apr 2020 21:24:19 +0800</lastBuildDate>
+    <atom:link href="https://caijin.dev/zh/front-end/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>axios的使用</title>
+      <link>https://caijin.dev/zh/front-end/axios%E7%9A%84%E4%BD%BF%E7%94%A8/</link>
+      <pubDate>Sat, 18 Apr 2020 21:24:19 +0800</pubDate>
+      <guid>https://caijin.dev/zh/front-end/axios%E7%9A%84%E4%BD%BF%E7%94%A8/</guid>
+      <description>axios 的使用 axios 是前端最常见的网络库。主要调用方式有两种形式：axios(config) 和 axios(url, config)，下面简要介绍axios的使用。&#xA;1、请求方法 常用的http请求方法有以下5个&#xA;方法 作用 GET 请求资源 POST 新增资源 PUT 更新资源（需要资源的所有信息） PATCH 更新资源的部分信息 DELETE 删除资源 例如有user对象：{&amp;quot;id&amp;quot;:1, &amp;quot;name&amp;quot;:&amp;quot;axios-user&amp;quot;, &amp;quot;age&amp;quot;:20}&#xA;使用axios发起请求可以用axios(config)的形式，如下所示：&#xA;axios({ method:&amp;#34;get&amp;#34;,//请求方法 url:&amp;#34;/users&amp;#34;,//请求的URL params:{id:1},//get、delete方法的请求参数，会放到url之后 data:{}//post、put、patch方法的请求参数，会放到body中 }).then((resp)=&amp;gt;{ //请求成功的处理 console.log(resp.data)//控制台打印返回的body数据 }).catch((err)=&amp;gt;{ //请求失败的处理 console.log(err) }).then(()={ //不管成功与否，都会执行 console.log(&amp;#34;此处一定会执行&amp;#34;) })对于其他的方式，换一下config对象种的method即可&#xA;2、别名 如果有很多的请求，每个我们都需要写一堆像上面1中的axios的配置信息，一个是写起来比较麻烦，另外一个，代码看起来也比较乱，axios也提供了对应请求方法的别名函数，用axios(url, config)的形式，如下所示：&#xA;//get axios(&amp;#34;/users&amp;#34;,{params:{id:1}}).then((resp)=&amp;gt;{}) //等同于如下方式 axios.get(&amp;#34;/users&amp;#34;,{params:{id:1}}).then((resp)=&amp;gt;{}) //post axios.post(&amp;#34;/user&amp;#34;,{id:2,name:&amp;#34;axios-user2&amp;#34;,age:22}) //put 只更新部分信息也需要将整个资源对象提交 axios.put(&amp;#34;/user&amp;#34;,{id:2,name:&amp;#34;axios-xxx&amp;#34;,age:22}) //patch 只需提交唯一标识和更改的数据项即可 axios.patch(&amp;#34;/users&amp;#34;,{id:2,age:18}) //delete axios.delete(&amp;#34;/users&amp;#34;,{params:{id:2}})3、并发请求 axios 也支持同时发起多个请求，并且可以获取到每个请求的结果，使用axios.all() 和 axios.spread()即可，all()方法的参数是函数数组，spread()方法接受的是回调函数，函数中的参数即是all()中的请求结果，顺序和all()保持一致。&#xA;例子如下：&#xA;axios.all( [ axios.get(&amp;#34;/users&amp;#34;),//请求1 axios.get(&amp;#34;/students&amp;#34;),//请求2 axios.post(&amp;#34;/teachers&amp;#34;,{id:5,name:&amp;#34;teacher wang&amp;#34;,age:35})//请求3 ] ).then( axios.</description>
+    </item>
+  </channel>
+</rss>

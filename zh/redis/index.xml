@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Redis on *&lt;^_^&gt;*</title>
+    <link>https://caijin.dev/zh/redis/</link>
+    <description>Recent content in Redis on *&lt;^_^&gt;*</description>
+    <generator>Hugo</generator>
+    <language>zh-CN</language>
+    <copyright>xxxx</copyright>
+    <lastBuildDate>Sat, 02 May 2020 20:20:42 +0800</lastBuildDate>
+    <atom:link href="https://caijin.dev/zh/redis/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>redis必知必会</title>
+      <link>https://caijin.dev/zh/redis/redis-%E5%85%B6%E4%BB%96/</link>
+      <pubDate>Sat, 02 May 2020 20:20:42 +0800</pubDate>
+      <guid>https://caijin.dev/zh/redis/redis-%E5%85%B6%E4%BB%96/</guid>
+      <description>Redis 其他 redis 数据淘汰机制 当机器内存不够的时候（达到物理机器或者配置的内存上限时），redis会依据数据淘汰机制淘汰一部分数据，有以下6种方式：&#xA;volatile-lru： 在设置了过期时间的key中，使用LRU（最近最少使用）算法，将最近最少使用的key淘汰 volatile-ttl： 在设置了过期时间的key中，根据TTL（time to live）时间，将快要过期的数据淘汰 volatile-random： 在设置了过期时间的key中，随机淘汰数据 allkeys-lru： 在所有key中，淘汰最近最少使用的数据 allkeys-random： 在所有key中，随机淘汰数据 noeviction： 禁止淘汰数据 redis缓存穿透、击穿、雪崩 缓存穿透：请求数据在redis中查询，查询不到，最后请求落到了数据库 缓存击穿：热门数据突然失效，大量请求到了数据库 缓存雪崩：大量数据同时失效 Note: 解决方案：&#xA;穿透：对于非法参数（eg：id&amp;lt;=0）增加参数校验，过滤掉不存在数据的请求；对于合法参数(eg: id=xxxx)，但是数据不存在：将数据设置为null 击穿：设置热点数据永不过期 雪崩：避免大量数据同一时间过期：分散过期时间；分散数据到不同缓存数据库 master-slave 作用：主从备份，防止节点宕机；读写分离，达到负载均衡目的，提高系统吞吐量 全量同步，发生在slave初始化阶段： slave连接master，发送SYNC命令 master收到命令后，开始执行BGSAVE命令生成rdb文件，并使用缓冲区记录此后所执行的_写命令_ master执行完BGSAVE命令后，向所有slave发送rdb文件 slave收到rdb文件后，丢弃所有旧数据，载入收到的数据 master发送完文件后，就开始放送缓冲区中的写命令 slave完成数据载入后，开始接收命令请求，并执行来自master同步的写命令 增量同步：slave初始化后正常工作，接收master发送的写命令。master每执行一个写命令就会向slave发送相同的写命令，slave接收并执行收到的写命令 同步策略：master、slave刚刚连接的时候，进行全量同步；全量同步结束后开始增量同步。如果有需要的话，slave在任何时候都可以发起全量同步。redis策略为，首先先进行增量同步，如不成功，进行全量同步 </description>
+    </item>
+    <item>
+      <title>redis持久化</title>
+      <link>https://caijin.dev/zh/redis/redis%E6%8C%81%E4%B9%85%E5%8C%96/</link>
+      <pubDate>Sat, 02 May 2020 20:20:42 +0800</pubDate>
+      <guid>https://caijin.dev/zh/redis/redis%E6%8C%81%E4%B9%85%E5%8C%96/</guid>
+      <description>redis持久化 两种方式：RDB、AOF&#xA;RDB，redis-database，使用压缩的二进制文件保存的是redis内存中完整的数据，相当于数据的快照，默认的持久化方式，可以手动执行以下命令执行，可以在配置文件中自动执行&#xA;SAVE命令：会阻塞服务器进程，此时所有命令都会一直阻塞直到save命令执行完毕 BGSAVE命令：会重新起一个进程处理，不会阻塞任何命令 恢复过程：&#xA;如果没开启AOF持久化，服务器才会使用RDB文件还原数据 如果开启了AOF持久化，服务器会优先使用AOF文件还原数据 AOF，append-only-file，默认关闭，服务器在执行完写命令后，会以协议格式将命令追加到AOF缓冲区，然后服务器根据appendfsync选项决定何时将AOF缓冲区内容写入到AOF文件。&#xA;appendfsync：&#xA;always，每个写命令都会同步到AOF文件，是最安全的方式，即使故障停机，丢失数据最多就一个写命令的数据 everysec，每秒钟都会同步数据到AOF文件，故障停机最多就丢失一秒钟的写入命令的数据，是AOF方式的默认值 no，从不同步数据，出现故障后，会丢失上次同步之后的所有写入数据 恢复过程：&#xA;创建一个伪客户端 从AOF文件分析并读取一条写命令 伪客户端执行命令 重复上两个步骤，直到AOF文件所有写命令执行完毕 随着运行时间的增加，AOF文件会越来越大，占用的磁盘空间会增加，而且数据恢复的过程所耗费的时间也会增加，为了解决这一问题，redis提供了AOF重写功能：redis会创建一个新的AOF文件替代现有AOF文件，新旧两个文件保存的数据相同，只不过新AOF文件保存的是精简后的命令，不会浪费存储空间&#xA;AOF重写过程：&#xA;服务器创建子进程，子进程开始AOF文件重写 服务器执行所有命令外还要将写命令写入AOF缓冲区和AOF重写缓冲区 子进程完成AOF重写后向父进程发送信号，父进程收到信号后： 将AOF重写缓冲区内容写入到新AOF文件中，保证新AOF文件保存的数据和服务器当前的数据一致 对新AOF文件重命名，覆盖现有AOF文件，完成新旧AOF文件替换 两种持久化方式的区别 实现方式&#xA;RDB持久化记录的是结果，AOF持久化记录的是过程&#xA;文件体积&#xA;记录结果的方式肯定比记录过程的方式占用的存储空间小，即：RDB文件占用的存储空间小&#xA;安全性&#xA;AOF的安全性要比RDB的高。RDB持久化会丢失从上次保存以后的数据，而AOF持久化最多丢失1s的数据&#xA;优先级&#xA;AOF的优先级比RDB的高</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Axios的使用 - *&lt;^_^&gt;*</title><meta name="author" content="caijin">
+<meta name="author-link" content="https://caijin.dev">
+<meta name="description" content="axios 的使用 axios 是前端最常见的网络库。主要调用方式有两种形式：axios(config) 和 axios(url, config)，下面简要介绍axios的使用。
+1、请求方法 常用的http请求方法有以下5个
+方法 作用 GET 请求资源 POST 新增资源 PUT 更新资源（需要资源的所有信息） PATCH 更新资源的部分信息 DELETE 删除资源 例如有user对象：{&quot;id&quot;:1, &quot;name&quot;:&quot;axios-user&quot;, &quot;age&quot;:20}
+使用axios发起请求可以用axios(config)的形式，如下所示：
+axios({ method:&#34;get&#34;,//请求方法 url:&#34;/users&#34;,//请求的URL params:{id:1},//get、delete方法的请求参数，会放到url之后 data:{}//post、put、patch方法的请求参数，会放到body中 }).then((resp)=&gt;{ //请求成功的处理 console.log(resp.data)//控制台打印返回的body数据 }).catch((err)=&gt;{ //请求失败的处理 console.log(err) }).then(()={ //不管成功与否，都会执行 console.log(&#34;此处一定会执行&#34;) })对于其他的方式，换一下config对象种的method即可
+2、别名 如果有很多的请求，每个我们都需要写一堆像上面1中的axios的配置信息，一个是写起来比较麻烦，另外一个，代码看起来也比较乱，axios也提供了对应请求方法的别名函数，用axios(url, config)的形式，如下所示：
+//get axios(&#34;/users&#34;,{params:{id:1}}).then((resp)=&gt;{}) //等同于如下方式 axios.get(&#34;/users&#34;,{params:{id:1}}).then((resp)=&gt;{}) //post axios.post(&#34;/user&#34;,{id:2,name:&#34;axios-user2&#34;,age:22}) //put 只更新部分信息也需要将整个资源对象提交 axios.put(&#34;/user&#34;,{id:2,name:&#34;axios-xxx&#34;,age:22}) //patch 只需提交唯一标识和更改的数据项即可 axios.patch(&#34;/users&#34;,{id:2,age:18}) //delete axios.delete(&#34;/users&#34;,{params:{id:2}})3、并发请求 axios 也支持同时发起多个请求，并且可以获取到每个请求的结果，使用axios.all() 和 axios.spread()即可，all()方法的参数是函数数组，spread()方法接受的是回调函数，函数中的参数即是all()中的请求结果，顺序和all()保持一致。
+例子如下：
+axios.all( [ axios.get(&#34;/users&#34;),//请求1 axios.get(&#34;/students&#34;),//请求2 axios.post(&#34;/teachers&#34;,{id:5,name:&#34;teacher wang&#34;,age:35})//请求3 ] ).then( axios." /><meta name="keywords" content='JavaScript, axis' />
+  <meta itemprop="name" content="axios的使用">
+  <meta itemprop="description" content="axios 的使用 axios 是前端最常见的网络库。主要调用方式有两种形式：axios(config) 和 axios(url, config)，下面简要介绍axios的使用。
+1、请求方法 常用的http请求方法有以下5个
+方法 作用 GET 请求资源 POST 新增资源 PUT 更新资源（需要资源的所有信息） PATCH 更新资源的部分信息 DELETE 删除资源 例如有user对象：{&#34;id&#34;:1, &#34;name&#34;:&#34;axios-user&#34;, &#34;age&#34;:20}
+使用axios发起请求可以用axios(config)的形式，如下所示：
+axios({ method:&#34;get&#34;,//请求方法 url:&#34;/users&#34;,//请求的URL params:{id:1},//get、delete方法的请求参数，会放到url之后 data:{}//post、put、patch方法的请求参数，会放到body中 }).then((resp)=&gt;{ //请求成功的处理 console.log(resp.data)//控制台打印返回的body数据 }).catch((err)=&gt;{ //请求失败的处理 console.log(err) }).then(()={ //不管成功与否，都会执行 console.log(&#34;此处一定会执行&#34;) })对于其他的方式，换一下config对象种的method即可
+2、别名 如果有很多的请求，每个我们都需要写一堆像上面1中的axios的配置信息，一个是写起来比较麻烦，另外一个，代码看起来也比较乱，axios也提供了对应请求方法的别名函数，用axios(url, config)的形式，如下所示：
+//get axios(&#34;/users&#34;,{params:{id:1}}).then((resp)=&gt;{}) //等同于如下方式 axios.get(&#34;/users&#34;,{params:{id:1}}).then((resp)=&gt;{}) //post axios.post(&#34;/user&#34;,{id:2,name:&#34;axios-user2&#34;,age:22}) //put 只更新部分信息也需要将整个资源对象提交 axios.put(&#34;/user&#34;,{id:2,name:&#34;axios-xxx&#34;,age:22}) //patch 只需提交唯一标识和更改的数据项即可 axios.patch(&#34;/users&#34;,{id:2,age:18}) //delete axios.delete(&#34;/users&#34;,{params:{id:2}})3、并发请求 axios 也支持同时发起多个请求，并且可以获取到每个请求的结果，使用axios.all() 和 axios.spread()即可，all()方法的参数是函数数组，spread()方法接受的是回调函数，函数中的参数即是all()中的请求结果，顺序和all()保持一致。
+例子如下：
+axios.all( [ axios.get(&#34;/users&#34;),//请求1 axios.get(&#34;/students&#34;),//请求2 axios.post(&#34;/teachers&#34;,{id:5,name:&#34;teacher wang&#34;,age:35})//请求3 ] ).then( axios.">
+  <meta itemprop="datePublished" content="2020-04-18T21:24:19+08:00">
+  <meta itemprop="dateModified" content="2020-04-18T21:24:19+08:00">
+  <meta itemprop="wordCount" content="161">
+  <meta itemprop="keywords" content="JavaScript,Axis"><meta property="og:url" content="https://caijin.dev/zh/front-end/axios%E7%9A%84%E4%BD%BF%E7%94%A8/">
+  <meta property="og:site_name" content="*&lt;^_^&gt;*">
+  <meta property="og:title" content="axios的使用">
+  <meta property="og:description" content="axios 的使用 axios 是前端最常见的网络库。主要调用方式有两种形式：axios(config) 和 axios(url, config)，下面简要介绍axios的使用。
+1、请求方法 常用的http请求方法有以下5个
+方法 作用 GET 请求资源 POST 新增资源 PUT 更新资源（需要资源的所有信息） PATCH 更新资源的部分信息 DELETE 删除资源 例如有user对象：{&#34;id&#34;:1, &#34;name&#34;:&#34;axios-user&#34;, &#34;age&#34;:20}
+使用axios发起请求可以用axios(config)的形式，如下所示：
+axios({ method:&#34;get&#34;,//请求方法 url:&#34;/users&#34;,//请求的URL params:{id:1},//get、delete方法的请求参数，会放到url之后 data:{}//post、put、patch方法的请求参数，会放到body中 }).then((resp)=&gt;{ //请求成功的处理 console.log(resp.data)//控制台打印返回的body数据 }).catch((err)=&gt;{ //请求失败的处理 console.log(err) }).then(()={ //不管成功与否，都会执行 console.log(&#34;此处一定会执行&#34;) })对于其他的方式，换一下config对象种的method即可
+2、别名 如果有很多的请求，每个我们都需要写一堆像上面1中的axios的配置信息，一个是写起来比较麻烦，另外一个，代码看起来也比较乱，axios也提供了对应请求方法的别名函数，用axios(url, config)的形式，如下所示：
+//get axios(&#34;/users&#34;,{params:{id:1}}).then((resp)=&gt;{}) //等同于如下方式 axios.get(&#34;/users&#34;,{params:{id:1}}).then((resp)=&gt;{}) //post axios.post(&#34;/user&#34;,{id:2,name:&#34;axios-user2&#34;,age:22}) //put 只更新部分信息也需要将整个资源对象提交 axios.put(&#34;/user&#34;,{id:2,name:&#34;axios-xxx&#34;,age:22}) //patch 只需提交唯一标识和更改的数据项即可 axios.patch(&#34;/users&#34;,{id:2,age:18}) //delete axios.delete(&#34;/users&#34;,{params:{id:2}})3、并发请求 axios 也支持同时发起多个请求，并且可以获取到每个请求的结果，使用axios.all() 和 axios.spread()即可，all()方法的参数是函数数组，spread()方法接受的是回调函数，函数中的参数即是all()中的请求结果，顺序和all()保持一致。
+例子如下：
+axios.all( [ axios.get(&#34;/users&#34;),//请求1 axios.get(&#34;/students&#34;),//请求2 axios.post(&#34;/teachers&#34;,{id:5,name:&#34;teacher wang&#34;,age:35})//请求3 ] ).then( axios.">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="front-end">
+    <meta property="article:published_time" content="2020-04-18T21:24:19+08:00">
+    <meta property="article:modified_time" content="2020-04-18T21:24:19+08:00">
+    <meta property="article:tag" content="JavaScript">
+    <meta property="article:tag" content="Axis">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="axios的使用">
+  <meta name="twitter:description" content="axios 的使用 axios 是前端最常见的网络库。主要调用方式有两种形式：axios(config) 和 axios(url, config)，下面简要介绍axios的使用。
+1、请求方法 常用的http请求方法有以下5个
+方法 作用 GET 请求资源 POST 新增资源 PUT 更新资源（需要资源的所有信息） PATCH 更新资源的部分信息 DELETE 删除资源 例如有user对象：{&#34;id&#34;:1, &#34;name&#34;:&#34;axios-user&#34;, &#34;age&#34;:20}
+使用axios发起请求可以用axios(config)的形式，如下所示：
+axios({ method:&#34;get&#34;,//请求方法 url:&#34;/users&#34;,//请求的URL params:{id:1},//get、delete方法的请求参数，会放到url之后 data:{}//post、put、patch方法的请求参数，会放到body中 }).then((resp)=&gt;{ //请求成功的处理 console.log(resp.data)//控制台打印返回的body数据 }).catch((err)=&gt;{ //请求失败的处理 console.log(err) }).then(()={ //不管成功与否，都会执行 console.log(&#34;此处一定会执行&#34;) })对于其他的方式，换一下config对象种的method即可
+2、别名 如果有很多的请求，每个我们都需要写一堆像上面1中的axios的配置信息，一个是写起来比较麻烦，另外一个，代码看起来也比较乱，axios也提供了对应请求方法的别名函数，用axios(url, config)的形式，如下所示：
+//get axios(&#34;/users&#34;,{params:{id:1}}).then((resp)=&gt;{}) //等同于如下方式 axios.get(&#34;/users&#34;,{params:{id:1}}).then((resp)=&gt;{}) //post axios.post(&#34;/user&#34;,{id:2,name:&#34;axios-user2&#34;,age:22}) //put 只更新部分信息也需要将整个资源对象提交 axios.put(&#34;/user&#34;,{id:2,name:&#34;axios-xxx&#34;,age:22}) //patch 只需提交唯一标识和更改的数据项即可 axios.patch(&#34;/users&#34;,{id:2,age:18}) //delete axios.delete(&#34;/users&#34;,{params:{id:2}})3、并发请求 axios 也支持同时发起多个请求，并且可以获取到每个请求的结果，使用axios.all() 和 axios.spread()即可，all()方法的参数是函数数组，spread()方法接受的是回调函数，函数中的参数即是all()中的请求结果，顺序和all()保持一致。
+例子如下：
+axios.all( [ axios.get(&#34;/users&#34;),//请求1 axios.get(&#34;/students&#34;),//请求2 axios.post(&#34;/teachers&#34;,{id:5,name:&#34;teacher wang&#34;,age:35})//请求3 ] ).then( axios.">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://caijin.dev/zh/front-end/axios%E7%9A%84%E4%BD%BF%E7%94%A8/" /><link rel="prev" href="https://caijin.dev/zh/linux/cgroup_subsystem/" /><link rel="next" href="https://caijin.dev/zh/mysql/mysql/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "axios的使用",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/caijin.dev\/zh\/front-end\/axios%E7%9A%84%E4%BD%BF%E7%94%A8\/"
+    },"genre": "posts","keywords": "JavaScript, axis","wordcount":  161 ,
+    "url": "https:\/\/caijin.dev\/zh\/front-end\/axios%E7%9A%84%E4%BD%BF%E7%94%A8\/","datePublished": "2020-04-18T21:24:19+08:00","dateModified": "2020-04-18T21:24:19+08:00","license": "xxxx","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "caijin"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/zh/" title="*&lt;^_^&gt;*"><span class="header-title-text">*&lt;^_^&gt;*</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/zh/"
+                
+                
+              >文档</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/zh/categories/"
+                
+                
+              >分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/zh/tags/"
+                
+                
+              >标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="https://github.com/CaiJinKen"
+                
+                rel="noopener noreferrer" target="_blank"
+              ><i class="fa fa-heart" style="color:red"></i> github</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li><li class="menu-item language-switch">
+            <span role="button" aria-label="" title=""><i class="fa-solid fa-language fa-fw" aria-hidden="true"></i></span>
+            <ul class="sub-menu"><li class="menu-item"></li></ul>
+          </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/zh/" title="*&lt;^_^&gt;*"><span class="header-title-text">*&lt;^_^&gt;*</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/zh/"
+                  
+                  
+                >文档</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/zh/categories/"
+                  
+                  
+                >分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/zh/tags/"
+                  
+                  
+                >标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="https://github.com/CaiJinKen"
+                  
+                  rel="noopener noreferrer" target="_blank"
+                ><i class="fa fa-heart" style="color:red"></i> github</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title=""><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span><span class="menu-system-item language-switch">
+              <span role="button" aria-label="" title="">简体中文<i class="dropdown-icon fa-solid fa-chevron-down" aria-hidden="true"></i></span>
+              <select class="language-select" onchange="location = this.value;"><option disabled></option></select>
+            </span></li>
+      </ul>
+    </nav>
+  </div>
+</header><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label=""></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Axios的使用</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://caijin.dev"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://avatars.githubusercontent.com/u/36183188?s=400&amp;u=69ec665b3e4ffcc40a98072d56fbaa5b044c5968&amp;v=4" alt="caijin" data-title="caijin" width="20" height="20" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;caijin</a></span><span class="post-included-in">&nbsp;</span></div><div class="post-meta-line"><span title=""><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2020-04-18">2020-04-18</time></span>&nbsp;<span title=""><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i></span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i></span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span></span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#axios-的使用">axios 的使用</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><h3 id="axios-的使用" class="heading-element"><span>axios 的使用</span>
+  <a href="#axios-%e7%9a%84%e4%bd%bf%e7%94%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><a href="https://github.com/axios/axios"target="_blank" rel="external nofollow noopener noreferrer">axios</a> 是前端最常见的网络库。主要调用方式有两种形式：axios(config) 和 axios(url, config)，下面简要介绍axios的使用。</p>
+<h4 id="1请求方法" class="heading-element"><span>1、请求方法</span>
+  <a href="#1%e8%af%b7%e6%b1%82%e6%96%b9%e6%b3%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>常用的http请求方法有以下5个</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td>请求资源</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>新增资源</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>更新资源（需要资源的所有信息）</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td>更新资源的部分信息</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>删除资源</td>
+</tr>
+</tbody>
+</table>
+<p>例如有user对象：<code>{&quot;id&quot;:1, &quot;name&quot;:&quot;axios-user&quot;, &quot;age&quot;:20}</code></p>
+<p>使用axios发起请求可以用axios(config)的形式，如下所示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">axios</span>({
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">method</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;get&#34;</span>,<span style="color:#75715e">//请求方法
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">url</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;/users&#34;</span>,<span style="color:#75715e">//请求的URL
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">params</span><span style="color:#f92672">:</span>{<span style="color:#a6e22e">id</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span>},<span style="color:#75715e">//get、delete方法的请求参数，会放到url之后
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">data</span><span style="color:#f92672">:</span>{}<span style="color:#75715e">//post、put、patch方法的请求参数，会放到body中
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}).<span style="color:#a6e22e">then</span>((<span style="color:#a6e22e">resp</span>)=&gt;{
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">//请求成功的处理
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">data</span>)<span style="color:#75715e">//控制台打印返回的body数据
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}).<span style="color:#66d9ef">catch</span>((<span style="color:#a6e22e">err</span>)=&gt;{
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">//请求失败的处理
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>}).<span style="color:#a6e22e">then</span>(()<span style="color:#f92672">=</span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">//不管成功与否，都会执行
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;此处一定会执行&#34;</span>)
+</span></span><span style="display:flex;"><span>})</span></span></code></pre></div><p>对于其他的方式，换一下config对象种的method即可</p>
+<h4 id="2别名" class="heading-element"><span>2、别名</span>
+  <a href="#2%e5%88%ab%e5%90%8d" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>如果有很多的请求，每个我们都需要写一堆像上面1中的axios的配置信息，一个是写起来比较麻烦，另外一个，代码看起来也比较乱，axios也提供了对应请求方法的别名函数，用axios(url, config)的形式，如下所示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#75715e">//get 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">axios</span>(<span style="color:#e6db74">&#34;/users&#34;</span>,{<span style="color:#a6e22e">params</span><span style="color:#f92672">:</span>{<span style="color:#a6e22e">id</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span>}}).<span style="color:#a6e22e">then</span>((<span style="color:#a6e22e">resp</span>)=&gt;{})
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//等同于如下方式
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">axios</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/users&#34;</span>,{<span style="color:#a6e22e">params</span><span style="color:#f92672">:</span>{<span style="color:#a6e22e">id</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span>}}).<span style="color:#a6e22e">then</span>((<span style="color:#a6e22e">resp</span>)=&gt;{})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//post
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">axios</span>.<span style="color:#a6e22e">post</span>(<span style="color:#e6db74">&#34;/user&#34;</span>,{<span style="color:#a6e22e">id</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span>,<span style="color:#a6e22e">name</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;axios-user2&#34;</span>,<span style="color:#a6e22e">age</span><span style="color:#f92672">:</span><span style="color:#ae81ff">22</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//put 只更新部分信息也需要将整个资源对象提交
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">axios</span>.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;/user&#34;</span>,{<span style="color:#a6e22e">id</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span>,<span style="color:#a6e22e">name</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;axios-xxx&#34;</span>,<span style="color:#a6e22e">age</span><span style="color:#f92672">:</span><span style="color:#ae81ff">22</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//patch 只需提交唯一标识和更改的数据项即可
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">axios</span>.<span style="color:#a6e22e">patch</span>(<span style="color:#e6db74">&#34;/users&#34;</span>,{<span style="color:#a6e22e">id</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span>,<span style="color:#a6e22e">age</span><span style="color:#f92672">:</span><span style="color:#ae81ff">18</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//delete
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">axios</span>.<span style="color:#66d9ef">delete</span>(<span style="color:#e6db74">&#34;/users&#34;</span>,{<span style="color:#a6e22e">params</span><span style="color:#f92672">:</span>{<span style="color:#a6e22e">id</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span>}})</span></span></code></pre></div><h4 id="3并发请求" class="heading-element"><span>3、并发请求</span>
+  <a href="#3%e5%b9%b6%e5%8f%91%e8%af%b7%e6%b1%82" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>axios 也支持同时发起多个请求，并且可以获取到每个请求的结果，使用axios.all() 和 axios.spread()即可，all()方法的参数是函数数组，spread()方法接受的是回调函数，函数中的参数即是all()中的请求结果，顺序和all()保持一致。</p>
+<p>例子如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">axios</span>.<span style="color:#a6e22e">all</span>(
+</span></span><span style="display:flex;"><span>	[
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">axios</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/users&#34;</span>),<span style="color:#75715e">//请求1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">axios</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/students&#34;</span>),<span style="color:#75715e">//请求2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">axios</span>.<span style="color:#a6e22e">post</span>(<span style="color:#e6db74">&#34;/teachers&#34;</span>,{<span style="color:#a6e22e">id</span><span style="color:#f92672">:</span><span style="color:#ae81ff">5</span>,<span style="color:#a6e22e">name</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;teacher wang&#34;</span>,<span style="color:#a6e22e">age</span><span style="color:#f92672">:</span><span style="color:#ae81ff">35</span>})<span style="color:#75715e">//请求3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  ]
+</span></span><span style="display:flex;"><span>).<span style="color:#a6e22e">then</span>(
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">axios</span>.<span style="color:#a6e22e">spread</span>((<span style="color:#a6e22e">resp1</span>,<span style="color:#a6e22e">resp2</span>,<span style="color:#a6e22e">resp3</span>)=&gt;{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//resp1,resp2,resp3分别是请求1、请求2、请求3的请求结果，顺序和all中保持一致
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">resp1</span>,<span style="color:#a6e22e">resp2</span>,<span style="color:#a6e22e">resp3</span>)
+</span></span><span style="display:flex;"><span>  })
+</span></span><span style="display:flex;"><span>})</span></span></code></pre></div><h4 id="4axios-实例" class="heading-element"><span>4、axios 实例</span>
+  <a href="#4axios-%e5%ae%9e%e4%be%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>在上面的方式中，我们使用的是axios提供默认的实例，对于应用中只有一个服务的时候，可以用默认的实例，但是如果需要请求多个服务（不同ip或者不同域名）的时候，默认的实例就无可奈何了，比如上面接口&quot;/users&quot;、&quot;/students&quot;、&quot;/teachers&quot;是3个不同的服务提供的，这个时候我们可以用axios提供的create()方法自己建实例，如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#75715e">//用户实例
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">userInstance</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">axios</span>.<span style="color:#a6e22e">create</span>({<span style="color:#a6e22e">baseURL</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;http://api.users.jin.com&#34;</span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//学生实例
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">studentInstace</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">axios</span>.<span style="color:#a6e22e">create</span>({<span style="color:#a6e22e">baseURL</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;http://api.student.jin.com&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//教师实例
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">teacherInstace</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">axios</span>.<span style="color:#a6e22e">create</span>({<span style="color:#a6e22e">baseURL</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;http://api.teacher.jin.com&#34;</span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//然后使用不同的实例去访问不同的资源
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">userInstace</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/users&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">teacherInstace</span>.<span style="color:#a6e22e">post</span>(<span style="color:#e6db74">&#34;/teachers&#34;</span>,{<span style="color:#a6e22e">id</span><span style="color:#f92672">:</span><span style="color:#ae81ff">5</span>,<span style="color:#a6e22e">name</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;xxx&#34;</span>,<span style="color:#a6e22e">age</span><span style="color:#f92672">:</span><span style="color:#ae81ff">40</span>})</span></span></code></pre></div><h4 id="5常用参数配置" class="heading-element"><span>5、常用参数配置</span>
+  <a href="#5%e5%b8%b8%e7%94%a8%e5%8f%82%e6%95%b0%e9%85%8d%e7%bd%ae" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>在以上的例子中，我们已经用到了axios的配置，比如method、params、baseURL，这节主要介绍一下axios常用的一些配置项及其作用</p>
+<table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>method</td>
+<td>发起请求的方法</td>
+</tr>
+<tr>
+<td>baseURL</td>
+<td>请求地址+端口（默认80）</td>
+</tr>
+<tr>
+<td>url</td>
+<td>请求path</td>
+</tr>
+<tr>
+<td>headers</td>
+<td>请求头</td>
+</tr>
+<tr>
+<td>params</td>
+<td>请求参数</td>
+</tr>
+<tr>
+<td>data</td>
+<td>请求body</td>
+</tr>
+<tr>
+<td>timeout</td>
+<td>超时时间，单位毫秒，默认0，代表永不超时</td>
+</tr>
+<tr>
+<td>maxRedirects</td>
+<td>最大重定向的次数</td>
+</tr>
+</tbody>
+</table>
+<p>配置项可以在新建实例或者发起请求的时候使用，不同的地方在于，新建实例的时候使用对所有使用该实例的请求都有效，发起请求的时候使用只对该请求有效：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#75715e">//创建实例时使用
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">teacherInstance</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">axios</span>.<span style="color:#a6e22e">create</span>({
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">baseURL</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;http://api.teacher.jin.com&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">url</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;/teachers&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">headers</span><span style="color:#f92672">:</span>{<span style="color:#e6db74">&#34;token&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;xxxxxx&#34;</span>},
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">timeout</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1000</span> <span style="color:#75715e">//1000ms
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//使用实例
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">teacherInstance</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/&#34;</span>,{<span style="color:#a6e22e">params</span><span style="color:#f92672">:</span>{<span style="color:#a6e22e">id</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span>}})
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//等同于 GET http://api.teacher.jin.com/taachers?id=1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//超时时间为1000ms，同时请求头带token信息
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//单个请求中覆盖实例的配置
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">teacherInstance</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/&#34;</span>,{<span style="color:#a6e22e">params</span><span style="color:#f92672">:</span>{<span style="color:#a6e22e">id</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span>},<span style="color:#a6e22e">timeout</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2000</span>})
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//超时时间为2000，同时请求头带token
+</span></span></span></code></pre></div><h4 id="6拦截器" class="heading-element"><span>6、拦截器</span>
+  <a href="#6%e6%8b%a6%e6%88%aa%e5%99%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>对于axios请求，可以在发起请求之前，或者处理响应之前做某些操作，比如发起请求前带上认证信息，获取响应失败的时候统一处理等，这些操作可以放到拦截器里面去统一来做。</p>
+<p>例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#75715e">//创建axios实例
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> <span style="color:#a6e22e">instance</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">axios</span>.<span style="color:#a6e22e">create</span>({})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//添加请求拦截器
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">instance</span>.<span style="color:#a6e22e">interceptors</span>.<span style="color:#a6e22e">request</span>.<span style="color:#a6e22e">use</span>(<span style="color:#a6e22e">config</span>=&gt;{
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">config</span>.<span style="color:#a6e22e">headers</span>.<span style="color:#a6e22e">token</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;token&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">config</span><span style="color:#75715e">//一定记得把配置项返回回去
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>},<span style="color:#a6e22e">err</span>=&gt;{
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">Promis</span>.<span style="color:#a6e22e">reject</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//添加响应拦截器
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">instance</span>.<span style="color:#a6e22e">interceptors</span>.<span style="color:#a6e22e">response</span>.<span style="color:#a6e22e">use</span>(<span style="color:#a6e22e">resp</span>=&gt;{
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">data</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">data</span>
+</span></span><span style="display:flex;"><span>},<span style="color:#a6e22e">err</span>=&gt;{
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">Promis</span>.<span style="color:#a6e22e">reject</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>})</span></span></code></pre></div></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="">&nbsp;</span>
+      </div><div class="post-info-license">
+            <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+          </div></div><div class="post-info-line">
+        <div class="post-info-md"></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title=" X" data-sharer="twitter" data-url="https://caijin.dev/zh/front-end/axios%E7%9A%84%E4%BD%BF%E7%94%A8/" data-title="Axios的使用" data-hashtags="JavaScript,axis"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title=" Facebook" data-sharer="facebook" data-url="https://caijin.dev/zh/front-end/axios%E7%9A%84%E4%BD%BF%E7%94%A8/" data-hashtag="JavaScript"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title=" 微博" data-sharer="weibo" data-url="https://caijin.dev/zh/front-end/axios%E7%9A%84%E4%BD%BF%E7%94%A8/" data-title="Axios的使用"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/zh/tags/javascript/" class="post-tag" title=" - JavaScript">JavaScript</a><a href="/zh/tags/axis/" class="post-tag" title=" - Axis">Axis</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();"></a></span>&nbsp;|&nbsp;<span><a href="/zh/"></a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/zh/linux/cgroup_subsystem/" class="post-nav-item" rel="prev" title="Cgroup_subsystem"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Cgroup_subsystem</a>
+      <a href="/zh/mysql/mysql/" class="post-nav-item" rel="next" title="Mysql简介">Mysql简介<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+</article>
+
+  <aside class="toc" id="toc-auto" aria-label=""><h2 class="toc-title">&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered order-2">
+        </div><div class="footer-line copyright order-1" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://caijin.dev"target="_blank" rel="external nofollow noopener noreferrer">caijin</a></span><span class="license footer-divider">MIT</span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label=""><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><noscript>
+    <div class="noscript-warning"></div>
+  </noscript>
+</div><link rel="preload" href="/lib/katex/katex.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.css"></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/katex/katex.min.js" defer></script><script src="/lib/katex/auto-render.min.js" defer></script><script src="/lib/katex/copy-tex.min.js" defer></script><script src="/lib/katex/mhchem.min.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/flyfish.js" defer></script><script>window.config={"code":{"copyTitle":"","editLockTitle":"","editUnLockTitle":"","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"","link":"","message":""},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"version":"v0.3.9"};</script><script src="/js/theme.min.js" defer></script></body>
+</html>
