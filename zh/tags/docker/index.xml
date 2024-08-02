@@ -1,15 +1,4 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-  <channel>
-    <title>Docker - tag - *&lt;^_^&gt;*</title>
-    <link>https://caijin.dev/zh/tags/docker/</link>
-    <description>Docker - tag | *&lt;^_^&gt;*</description>
-    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><copyright>xxxx</copyright><lastBuildDate>Thu, 22 Aug 2019 21:22:50 &#43;0800</lastBuildDate><atom:link href="https://caijin.dev/zh/tags/docker/" rel="self" type="application/rss+xml" /><item>
-  <title>Cgroup_subsystem</title>
-  <link>https://caijin.dev/zh/linux/cgroup_subsystem/</link>
-  <pubDate>Thu, 22 Aug 2019 21:22:50 &#43;0800</pubDate>
-  <author>caijin</author>
-  <guid>https://caijin.dev/zh/linux/cgroup_subsystem/</guid>
-  <description><![CDATA[上一篇cgroup主要讲了cgroup和常用的subsystem，算是理论部分，都说实践出真理，这篇文章就是实践部分了，介绍如何使用。
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Docker - tag - *&lt;^_^>*</title><link>https://caijin.dev/zh/tags/docker/</link><description>Docker - tag | *&lt;^_^>*</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><copyright>xxxx</copyright><lastBuildDate>Thu, 22 Aug 2019 21:22:50 +0800</lastBuildDate><atom:link href="https://caijin.dev/zh/tags/docker/" rel="self" type="application/rss+xml"/><item><title>Cgroup_subsystem</title><link>https://caijin.dev/zh/linux/cgroup_subsystem/</link><pubDate>Thu, 22 Aug 2019 21:22:50 +0800</pubDate><author>caijin</author><guid>https://caijin.dev/zh/linux/cgroup_subsystem/</guid><description>上一篇cgroup主要讲了cgroup和常用的subsystem，算是理论部分，都说实践出真理，这篇文章就是实践部分了，介绍如何使用。
 subsystem cpuset
 限制 cpuset.cpus: 设置任务可以使用的CPU核心的编号，格式为：from_number-to_number, number，用,隔开 cpuset.mems: 设置cpu可使用的memory node，格式同上 统计 cpuset.effective_cpus: 在使用的cpu核心 cpuset.effective_mem: 在使用的memory node cpuset.memory_pressure：cupset中的分页 cpu
 限制 cpu.cfs_quota_us: 设定周期内最多可使用的时间 cpu.cfs_period_us: 设置使用cpu的周期时间，需要和cfs_quota_us配合使用 统计 cpu.stat: 显示各种统计信息 cpuacct.stat: 统计用户态和内核态使用的cpu时长 cpuacct.usage_*: 统计每个任务使用的cpu时长 blkio
@@ -19,46 +8,19 @@ memory.limit_in_bytes: 设置内存使用限制，单位有k、m、g，-1时无�
 memory.max_usage_in_bytes: 设置最大内存使用量
 memory.move_charge_at_immigrate: 设置移动的花费
 memory.soft_limit_in_bytes: 软限制，需要比limit_in_bytes小
-memory.oom_control：改参数填 0 或 1， 0表示开启，当 cgroup 中的进程使用资源超过界限时立即杀死进程，1表示不启用。默认情况下，包含 memory 子系统的 cgroup 都启用]]></description>
-</item>
-<item>
-  <title>Cgroup</title>
-  <link>https://caijin.dev/zh/linux/cgroup/</link>
-  <pubDate>Mon, 19 Aug 2019 20:18:42 &#43;0800</pubDate>
-  <author>caijin</author>
-  <guid>https://caijin.dev/zh/linux/cgroup/</guid>
-  <description><![CDATA[简介 Croups(control groups)是Linux内核提供的一种可以限制、记录、隔离进程(进程组)所使用的的物理资源（如：CPU、memory、IO、device等）的机制。是轻量级虚拟化技术（docker、lxc）的基础之一。另外的基础包括namespace、ufs(union file system)等。
+memory.oom_control：改参数填 0 或 1， 0表示开启，当 cgroup 中的进程使用资源超过界限时立即杀死进程，1表示不启用。默认情况下，包含 memory 子系统的 cgroup 都启用</description></item><item><title>Cgroup</title><link>https://caijin.dev/zh/linux/cgroup/</link><pubDate>Mon, 19 Aug 2019 20:18:42 +0800</pubDate><author>caijin</author><guid>https://caijin.dev/zh/linux/cgroup/</guid><description>简介 Croups(control groups)是Linux内核提供的一种可以限制、记录、隔离进程(进程组)所使用的的物理资源（如：CPU、memory、IO、device等）的机制。是轻量级虚拟化技术（docker、lxc）的基础之一。另外的基础包括namespace、ufs(union file system)等。
 概念 基本概念 任务（task）。在cgroup中，任务就是系统的一个进程。 控制组（control group）。控制组就是一组按照某种标准划分的进程，比如按内存大小，cpu的使用率，或者io的速率限制划分成组。一个进程可以加入到某个控制组，也可以从一个组迁移到另外一个组。一个组中的进程可以使用cgroup以控制组为单位分配的资源，同时受到组分配到的资源的限制。 层级（hierarchy）。控制组可以组织成为层级的形式，组成一棵控制组树。控制组树上的子节点是父节点控制组的孩子，继承父控制组的资源限制。 子系统（subsystem）。一个子系统就是一个资源控制器，子系统必须附加（attach）到一个层级上才能使用。 关系和限制 一个子系统最多只能附加到一个层级。 一个层级可以有多个子系统。 一个任务可以是多个cgroup的成员，但是这些cgroup必须是不同的层级。 任务创建子任务时，子任务自动成为其父任务所在的cgroup成员。可以把子任务移动到不同的cgroup中，但最开始时，它总是继承父任务的cgroup。 系统支持的子系统 查看系统支持的cgroup
-# 1、安装cgroup工具，如果已经安装，请忽略 sudo apt install cgroup-tools # 2、查看系统的子系统 $lssubsys cpuset cpu,cpuacct blkio memory devices freezer net_cls,net_prio perf_event hugetlb pids rdma jin@k53:~$ jin@k53:~$ uname -a Linux k53 5.0.0-25-generic #26-Ubuntu SMP Thu Aug 1 12:04:58 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux jin@k53:~$ lsb_release -a No LSB modules are available. Distributor ID: Ubuntu Description: Ubuntu 19.]]></description>
-</item>
-<item>
-  <title>Namespace_Improve</title>
-  <link>https://caijin.dev/zh/linux/namespace_improve/</link>
-  <pubDate>Fri, 16 Aug 2019 21:03:23 &#43;0800</pubDate>
-  <author>caijin</author>
-  <guid>https://caijin.dev/zh/linux/namespace_improve/</guid>
-  <description><![CDATA[在上一篇namespace的文章中，我们了解并通过程序写了一个简单版的容器，体验了Linux namespace的功能，但是还有两个美中不足的地方，一个是需要使用root权限才能够运行我们的程序，另外一个我们在容器中使用ps看到pid为1的进程是/proc/self/exe child sh，而不是sh。所以这篇文章就讲讲如何解决这两个问题。
+# 1、安装cgroup工具，如果已经安装，请忽略 sudo apt install cgroup-tools # 2、查看系统的子系统 $lssubsys cpuset cpu,cpuacct blkio memory devices freezer net_cls,net_prio perf_event hugetlb pids rdma jin@k53:~$ jin@k53:~$ uname -a Linux k53 5.0.0-25-generic #26-Ubuntu SMP Thu Aug 1 12:04:58 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux jin@k53:~$ lsb_release -a No LSB modules are available. Distributor ID: Ubuntu Description: Ubuntu 19.</description></item><item><title>Namespace_Improve</title><link>https://caijin.dev/zh/linux/namespace_improve/</link><pubDate>Fri, 16 Aug 2019 21:03:23 +0800</pubDate><author>caijin</author><guid>https://caijin.dev/zh/linux/namespace_improve/</guid><description>在上一篇namespace的文章中，我们了解并通过程序写了一个简单版的容器，体验了Linux namespace的功能，但是还有两个美中不足的地方，一个是需要使用root权限才能够运行我们的程序，另外一个我们在容器中使用ps看到pid为1的进程是/proc/self/exe child sh，而不是sh。所以这篇文章就讲讲如何解决这两个问题。
 root权限 在Linux namespace中，只有user namespace 是可以被普通用户创建的，其他的namespace 都需要有root权限才可以。但这样就会有问题：
 1、并不是每个用户都有sudo权限；
 2、进程的安全性。
 其实第一点还好解决，关键是第二点，运行的进程是以root权限运行的，这就有可能导致安全问题，比如，容器内的进程受到攻击，控制权到了攻击者的手中，此时的进程是用root权限运行的，所以攻击者可以用该进程执行任意权限的操作。
-也有人可能会想，我们不是已经把所有的namespace都clone出来了么，rootfs也改变了，即使被攻击了，影响的范围也就是container中。说的是没错，不过，如果我们把主机的目录当作卷挂载到了container中，那么攻击者所能影响的范围就扩大到了主机中。所以，我们就把这个影响减少到最少&mdash;当前用户的权限。看看代码：
-uid := os.Getuid() gid := os.Getgid() cmd.SysProcAttr = &amp;syscall.SysProcAttr{ Cloneflags: syscall.CLONE_NEWUSER | syscall.CLONE_NEWUTS | syscall.CLONE_NEWNS | syscall.CLONE_NEWIPC | syscall.CLONE_NEWNET | syscall.CLONE_NEWPID, UidMappings: []syscall.SysProcIDMap{{0, uid, 1}}, GidMappings: []syscall.SysProcIDMap{{0, gid, 1}}, Credential: &amp;syscall.Credential{ Uid: 0, Gid: 0, }, }第一行和第二行得到当前登陆用户的uid/gid (user id/ group id)；
+也有人可能会想，我们不是已经把所有的namespace都clone出来了么，rootfs也改变了，即使被攻击了，影响的范围也就是container中。说的是没错，不过，如果我们把主机的目录当作卷挂载到了container中，那么攻击者所能影响的范围就扩大到了主机中。所以，我们就把这个影响减少到最少&amp;mdash;当前用户的权限。看看代码：
+uid := os.Getuid() gid := os.Getgid() cmd.SysProcAttr = &amp;amp;syscall.SysProcAttr{ Cloneflags: syscall.CLONE_NEWUSER | syscall.CLONE_NEWUTS | syscall.CLONE_NEWNS | syscall.CLONE_NEWIPC | syscall.CLONE_NEWNET | syscall.CLONE_NEWPID, UidMappings: []syscall.SysProcIDMap{{0, uid, 1}}, GidMappings: []syscall.SysProcIDMap{{0, gid, 1}}, Credential: &amp;amp;syscall.Credential{ Uid: 0, Gid: 0, }, }第一行和第二行得到当前登陆用户的uid/gid (user id/ group id)；
 第六行，我们做了一个uid的映射，syscall.SysProcIDMap第一个参数是容器内的用户的id，0是root，第二个参数是需要映射的用户的权限，第三个参数是映射范围，一般用1就可以，表示一一对应；第七行也是一样，只不过是gid的映射；
 第8行，设置容器内用户的uid和gid，都为0，说明是用户是root，用户所在的组是root组
 重新编译运行：
-jin@k53:~/go-test$ go build namespace.go jin@k53:~/go-test$ ./namespace run sh p pid: 4342 c p pid: 0 c pid: 1 / # / # 可以看到现在不用root权限就可以运行了。docker 也不需要root权限就能运行呢，向docker又前进了一小步，而且，容器内是root，容器外，sh其实是以普通用户执行的，安全性又得到了保证。其实这种安全性是很粗糙的，关于容器的安全性，是一个比较有意思的话题，后面也许会单独谈谈。]]></description>
-</item>
-<item>
-  <title>Namespace</title>
-  <link>https://caijin.dev/zh/linux/namespace/</link>
-  <pubDate>Wed, 14 Aug 2019 19:33:19 &#43;0800</pubDate>
-  <author>caijin</author>
-  <guid>https://caijin.dev/zh/linux/namespace/</guid>
-  <description><![CDATA[简介 linux namespace 是linux内核提供的一种环境（资源）隔离的方式，主要提供了UTS、IPC、network、User、mount、PID的隔离
+jin@k53:~/go-test$ go build namespace.go jin@k53:~/go-test$ ./namespace run sh p pid: 4342 c p pid: 0 c pid: 1 / # / # 可以看到现在不用root权限就可以运行了。docker 也不需要root权限就能运行呢，向docker又前进了一小步，而且，容器内是root，容器外，sh其实是以普通用户执行的，安全性又得到了保证。其实这种安全性是很粗糙的，关于容器的安全性，是一个比较有意思的话题，后面也许会单独谈谈。</description></item><item><title>Namespace</title><link>https://caijin.dev/zh/linux/namespace/</link><pubDate>Wed, 14 Aug 2019 19:33:19 +0800</pubDate><author>caijin</author><guid>https://caijin.dev/zh/linux/namespace/</guid><description><![CDATA[简介 linux namespace 是linux内核提供的一种环境（资源）隔离的方式，主要提供了UTS、IPC、network、User、mount、PID的隔离
 类别 系统调用参数 内核版本 作用 UTS CLONE_NEWUTS Linux 2.6.19 隔离主机名称，域名称 IPC CLONE_NEWIPC Linux 2.6.10 隔离进程间通信 Network CLONE_NEWNET Linux 2.6.29 隔离网络 User CLONE_NEWUSER Linux 3.8 隔离用户 Mount CLONE_NEWNS Linux 2.4.19 隔离挂载点 PID CLONE_NEWPID linux 2.6.24 隔离进程ID UTC 未隔离之前，我们先看看主机名，打开两个终端，终端1执行hostname，查看当前主机名，第二个终端中执行sudo hostname xxx再在终端1中执行hostname，可以发现主机名称已经被修改了。
 为了能够更好的感受下namespace，自己动手写个程序是最好不过的方式了，下面是我写的一个demo，文件名是namespace.go
-package main import ( &#34;fmt&#34; &#34;os&#34; &#34;os/exec&#34; &#34;syscall&#34; ) func main() { cmd := exec.Command(os.Args[1]) cmd.SysProcAttr = &amp;syscall.SysProcAttr{ Cloneflags: syscall.CLONE_NEWUTS, } cmd.Stdin = os.Stdin cmd.Stdout = os.Stdout cmd.]]></description>
-</item>
-</channel>
-</rss>
+package main import ( &#34;fmt&#34; &#34;os&#34; &#34;os/exec&#34; &#34;syscall&#34; ) func main() { cmd := exec.Command(os.Args[1]) cmd.SysProcAttr = &amp;syscall.SysProcAttr{ Cloneflags: syscall.CLONE_NEWUTS, } cmd.Stdin = os.Stdin cmd.Stdout = os.Stdout cmd.]]></description></item></channel></rss>

@@ -1,41 +1,30 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Golangs on *&lt;^_^&gt;*</title>
-    <link>https://caijin.dev/zh/golang/</link>
-    <description>Recent content in Golangs on *&lt;^_^&gt;*</description>
-    <generator>Hugo</generator>
-    <language>zh-CN</language>
-    <copyright>xxxx</copyright>
-    <lastBuildDate>Sat, 02 May 2020 20:20:42 +0800</lastBuildDate>
-    <atom:link href="https://caijin.dev/zh/golang/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>unsafe.Pointer</title>
-      <link>https://caijin.dev/zh/golang/unsafe.pointer/</link>
-      <pubDate>Sat, 02 May 2020 20:20:42 +0800</pubDate>
-      <guid>https://caijin.dev/zh/golang/unsafe.pointer/</guid>
-      <description>unsafe.Pointer相当于指向任意类型的指针(*指针)，但它有四种特殊的操作不同于一般的指针：&#xA;任意类型的指针(*)可以转换为Pointer Pointer指针也可以转换为任意类型的指针 uintptr可以转换成Pointer Pointer可以也可以转换为uintptr 即:&#xA;Pointer &amp;lt;&amp;mdash;&amp;gt;(*)&#xA;uintptr&amp;lt;&amp;mdash;-&amp;gt; Pointer&#xA;Pointer允许程序忽略类型检测从而读写任意的内存，所以在使用unsafe包的时候要格外小心。&#xA;比如将float64转化为int64，正常情况下是需要遵守go的类型检测，进行类型强转之后才能正常运行：&#xA;var ( sourceValue float64 targetValue int46 ) sourceValue = 300.00 targetValue = int64(sourceValue) // targetValue = sourceValue //err: type not match 使用示例：&#xA;将*T1转换为*T2&#xA;func Float64bits(f float64) uint64{ return (*uint64)(unsafe.Pointer(&amp;amp;f)) } //unsafe.Pointer(&amp;amp;f)即第一条规则：将任意类型指针转换为Pointer //(*uint64)(unsafe.Pointer)即第二条规则：将Pointer转换为任意类型 将Pointer转换为uintptr(取地址值)&#xA;func Pointer2uintptr(p unsafe.Pointer) uintprt{ return (uintptr)(p) } //(uintprt)(unsafe.Pointer)即第三条规则：将Pointer转换为uintptr Note:一般情况下不要这么用，因为uintptr本质上是整数类型，当Pointer中的指针值变了以后，uintptr的值并不随着原始指针的值变化，这里仅仅只是出于演示的目的这么写，所以别用任何变量保存Pointer转换为uintptr之后的值&#xA;将指针和偏移做运算以后返回&#xA;p = unsafe.Pointer(uintptr(p)+offset) //offset 是一个整型的值，可以是计算后的，比如 //对于结构体： f = unsafe.Pointer(uintptr(unsafe.Pointer(&amp;amp;s))+unsafe.Offsetof(s.f)) //上面等同于 f = unsafe.Pointer(&amp;amp;s.f) //对于slice e := unsafe.</description>
-    </item>
-    <item>
-      <title>golang内存对齐</title>
-      <link>https://caijin.dev/zh/golang/%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90/</link>
-      <pubDate>Sat, 02 May 2020 20:18:42 +0800</pubDate>
-      <guid>https://caijin.dev/zh/golang/%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90/</guid>
-      <description>golang内存对齐 一个golang的结构体，在内存中是如何存放的呢？即，结构体的内存结构是什么样的呢？有没有优化的空间呢？今天来一探究竟&#xA;note:我所用的是64bite的机器，在32位的机器有些类型的大小是不一样的，比如int&#xA;基本数据类型的大小&#xA;var ( boolField bool byteField byte int8Field int8 int16Field int16 int32Field int32 intField int int64Field int64 float32Field float32 float64Field float64 stringField string mapField map[string]interface{} sliceField []interface{} ) fmt.Println(unsafe.Sizeof(boolField)) //1 fmt.Println(unsafe.Sizeof(byteField)) //1 fmt.Println(unsafe.Sizeof(int8Field)) //1 fmt.Println(unsafe.Sizeof(int16Field)) //2 fmt.Println(unsafe.Sizeof(int32Field)) //4 fmt.Println(unsafe.Sizeof(intField)) //8 fmt.Println(unsafe.Sizeof(int64Field)) //8 fmt.Println(unsafe.Sizeof(float32Field)) //4 fmt.Println(unsafe.Sizeof(float64Field)) //8 fmt.Println(unsafe.Sizeof(stringField)) //16 fmt.Println(unsafe.Sizeof(mapField)) //8 fmt.Println(unsafe.Sizeof(sliceField)) //24 note: unsafe.Sizeof()返回的是字节数，如果有这么一个结构体，它所占用的内存是28B么？&#xA;type testStruct struct { boolField bool stringField string byteField byte int64Field int64 int16Field int16 }运行一下看看：</description>
-    </item>
-    <item>
-      <title>golang高级001</title>
-      <link>https://caijin.dev/zh/golang/golang%E9%AB%98%E7%BA%A7/</link>
-      <pubDate>Wed, 14 Aug 2019 19:33:19 +0800</pubDate>
-      <guid>https://caijin.dev/zh/golang/golang%E9%AB%98%E7%BA%A7/</guid>
-      <description> CSP模型，goroutine调度&#xA;csp并发模型：csp并发模型不同于一般的多线程通过共享内存进行通信的方式，而是采用“通过通信进行共享，而不是通过共享进行通信”，用于多个独立并发的实体通过共享通信的channel进行通信的并发模型。csp中channel是第一类对象，它不关注发送消息的实体，而是关注发送消息时使用的channel。&#xA;goroutine调度：&#xA;M：内核线程&#xA;P：cpu的一个核&#xA;G：goroutine&#xA;控制并发的方式&#xA;通过channel进行并发控制 通过sync包的WaitGroup进行并发控制 通过context进行并发控制 GC&#xA;gc算法：三色标记法（标记-清除）&#xA;流出如下：&#xA;初始把所有对象标记为白色 从全局变量和栈变量作为GC root，开始找到所有可达对象，标记为灰色，放入待处理队列 遍历灰色对象队列，将其引用的对象标记为灰色放入队列，自身标记为黑色，并从队列中删除 循环往复上一步，直到灰色队列为空 剩余的白色对象即为垃圾对象，执行清理工作 触发GC的条件：&#xA;辅助GC：分配内存时，会判断当前heap内存分配量是否达到触发一轮GC的阀值（每轮GC完成后，阀值会被动态设置），如果超过阀值，则启动一轮GC 显式调用runtime.GC()强制启动一轮GC sysmon是运行时的守护进程，当超过 forcegcperiod (2分钟)没有运行GC会启动一轮GC </description>
-    </item>
-    <item>
-      <title>golang高级002</title>
-      <link>https://caijin.dev/zh/golang/golang-%E9%AB%98%E7%BA%A7/</link>
-      <pubDate>Wed, 14 Aug 2019 19:33:19 +0800</pubDate>
-      <guid>https://caijin.dev/zh/golang/golang-%E9%AB%98%E7%BA%A7/</guid>
-      <description> map查找、类型断言、chan都会产生两个值，后一个值为bool类型&#xA;map为返回是否有对应的key，断言为是为判断的类型，chan为是否成功获取值（调用close关闭chan时，也会获取到零值，不能判断是发送的就是零值还是close关闭的，此时ok就有用了，为false）&#xA;如果一个类型本身是一个指针的话，是不允许出现在接收器中的&#xA;type P *int func (P)String() string{return &amp;#34;&amp;#34;}// compile error </description>
-    </item>
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Golangs on *&lt;^_^>*</title><link>https://caijin.dev/zh/golang/</link><description>Recent content in Golangs on *&lt;^_^>*</description><generator>Hugo</generator><language>zh-CN</language><copyright>xxxx</copyright><lastBuildDate>Sat, 02 May 2020 20:20:42 +0800</lastBuildDate><atom:link href="https://caijin.dev/zh/golang/index.xml" rel="self" type="application/rss+xml"/><item><title>unsafe.Pointer</title><link>https://caijin.dev/zh/golang/unsafe.pointer/</link><pubDate>Sat, 02 May 2020 20:20:42 +0800</pubDate><guid>https://caijin.dev/zh/golang/unsafe.pointer/</guid><description>unsafe.Pointer相当于指向任意类型的指针(*指针)，但它有四种特殊的操作不同于一般的指针：
+任意类型的指针(*)可以转换为Pointer Pointer指针也可以转换为任意类型的指针 uintptr可以转换成Pointer Pointer可以也可以转换为uintptr 即:
+Pointer &amp;lt;&amp;mdash;&amp;gt;(*)
+uintptr&amp;lt;&amp;mdash;-&amp;gt; Pointer
+Pointer允许程序忽略类型检测从而读写任意的内存，所以在使用unsafe包的时候要格外小心。
+比如将float64转化为int64，正常情况下是需要遵守go的类型检测，进行类型强转之后才能正常运行：
+var ( sourceValue float64 targetValue int46 ) sourceValue = 300.00 targetValue = int64(sourceValue) // targetValue = sourceValue //err: type not match 使用示例：
+将*T1转换为*T2
+func Float64bits(f float64) uint64{ return (*uint64)(unsafe.Pointer(&amp;amp;f)) } //unsafe.Pointer(&amp;amp;f)即第一条规则：将任意类型指针转换为Pointer //(*uint64)(unsafe.Pointer)即第二条规则：将Pointer转换为任意类型 将Pointer转换为uintptr(取地址值)
+func Pointer2uintptr(p unsafe.Pointer) uintprt{ return (uintptr)(p) } //(uintprt)(unsafe.Pointer)即第三条规则：将Pointer转换为uintptr Note:一般情况下不要这么用，因为uintptr本质上是整数类型，当Pointer中的指针值变了以后，uintptr的值并不随着原始指针的值变化，这里仅仅只是出于演示的目的这么写，所以别用任何变量保存Pointer转换为uintptr之后的值
+将指针和偏移做运算以后返回
+p = unsafe.Pointer(uintptr(p)+offset) //offset 是一个整型的值，可以是计算后的，比如 //对于结构体： f = unsafe.Pointer(uintptr(unsafe.Pointer(&amp;amp;s))+unsafe.Offsetof(s.f)) //上面等同于 f = unsafe.Pointer(&amp;amp;s.f) //对于slice e := unsafe.</description></item><item><title>golang内存对齐</title><link>https://caijin.dev/zh/golang/%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90/</link><pubDate>Sat, 02 May 2020 20:18:42 +0800</pubDate><guid>https://caijin.dev/zh/golang/%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90/</guid><description>golang内存对齐 一个golang的结构体，在内存中是如何存放的呢？即，结构体的内存结构是什么样的呢？有没有优化的空间呢？今天来一探究竟
+note:我所用的是64bite的机器，在32位的机器有些类型的大小是不一样的，比如int
+基本数据类型的大小
+var ( boolField bool byteField byte int8Field int8 int16Field int16 int32Field int32 intField int int64Field int64 float32Field float32 float64Field float64 stringField string mapField map[string]interface{} sliceField []interface{} ) fmt.Println(unsafe.Sizeof(boolField)) //1 fmt.Println(unsafe.Sizeof(byteField)) //1 fmt.Println(unsafe.Sizeof(int8Field)) //1 fmt.Println(unsafe.Sizeof(int16Field)) //2 fmt.Println(unsafe.Sizeof(int32Field)) //4 fmt.Println(unsafe.Sizeof(intField)) //8 fmt.Println(unsafe.Sizeof(int64Field)) //8 fmt.Println(unsafe.Sizeof(float32Field)) //4 fmt.Println(unsafe.Sizeof(float64Field)) //8 fmt.Println(unsafe.Sizeof(stringField)) //16 fmt.Println(unsafe.Sizeof(mapField)) //8 fmt.Println(unsafe.Sizeof(sliceField)) //24 note: unsafe.Sizeof()返回的是字节数，如果有这么一个结构体，它所占用的内存是28B么？
+type testStruct struct { boolField bool stringField string byteField byte int64Field int64 int16Field int16 }运行一下看看：</description></item><item><title>golang高级001</title><link>https://caijin.dev/zh/golang/golang%E9%AB%98%E7%BA%A7/</link><pubDate>Wed, 14 Aug 2019 19:33:19 +0800</pubDate><guid>https://caijin.dev/zh/golang/golang%E9%AB%98%E7%BA%A7/</guid><description> CSP模型，goroutine调度
+csp并发模型：csp并发模型不同于一般的多线程通过共享内存进行通信的方式，而是采用“通过通信进行共享，而不是通过共享进行通信”，用于多个独立并发的实体通过共享通信的channel进行通信的并发模型。csp中channel是第一类对象，它不关注发送消息的实体，而是关注发送消息时使用的channel。
+goroutine调度：
+M：内核线程
+P：cpu的一个核
+G：goroutine
+控制并发的方式
+通过channel进行并发控制 通过sync包的WaitGroup进行并发控制 通过context进行并发控制 GC
+gc算法：三色标记法（标记-清除）
+流出如下：
+初始把所有对象标记为白色 从全局变量和栈变量作为GC root，开始找到所有可达对象，标记为灰色，放入待处理队列 遍历灰色对象队列，将其引用的对象标记为灰色放入队列，自身标记为黑色，并从队列中删除 循环往复上一步，直到灰色队列为空 剩余的白色对象即为垃圾对象，执行清理工作 触发GC的条件：
+辅助GC：分配内存时，会判断当前heap内存分配量是否达到触发一轮GC的阀值（每轮GC完成后，阀值会被动态设置），如果超过阀值，则启动一轮GC 显式调用runtime.GC()强制启动一轮GC sysmon是运行时的守护进程，当超过 forcegcperiod (2分钟)没有运行GC会启动一轮GC</description></item><item><title>golang高级002</title><link>https://caijin.dev/zh/golang/golang-%E9%AB%98%E7%BA%A7/</link><pubDate>Wed, 14 Aug 2019 19:33:19 +0800</pubDate><guid>https://caijin.dev/zh/golang/golang-%E9%AB%98%E7%BA%A7/</guid><description> map查找、类型断言、chan都会产生两个值，后一个值为bool类型
+map为返回是否有对应的key，断言为是为判断的类型，chan为是否成功获取值（调用close关闭chan时，也会获取到零值，不能判断是发送的就是零值还是close关闭的，此时ok就有用了，为false）
+如果一个类型本身是一个指针的话，是不允许出现在接收器中的
+type P *int func (P)String() string{return &amp;#34;&amp;#34;}// compile error</description></item></channel></rss>

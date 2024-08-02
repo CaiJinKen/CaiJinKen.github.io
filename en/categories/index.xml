@@ -1,7 +1,1 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-  <channel>
-    <title>Categories - Category - *&lt;^_^&gt;*</title>
-    <link>https://caijin.dev/en/categories/</link>
-    <description>Categories - Category | *&lt;^_^&gt;*</description>
-    <generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>xxxx</copyright><atom:link href="https://caijin.dev/en/categories/" rel="self" type="application/rss+xml" /></channel>
-</rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Categories - Category - *&lt;^_^>*</title><link>https://caijin.dev/en/categories/</link><description>Categories - Category | *&lt;^_^>*</description><generator>Hugo -- gohugo.io</generator><language>en-US</language><copyright>xxxx</copyright><atom:link href="https://caijin.dev/en/categories/" rel="self" type="application/rss+xml"/></channel></rss>

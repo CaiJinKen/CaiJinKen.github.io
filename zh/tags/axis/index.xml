@@ -1,15 +1,4 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-  <channel>
-    <title>Axis - tag - *&lt;^_^&gt;*</title>
-    <link>https://caijin.dev/zh/tags/axis/</link>
-    <description>Axis - tag | *&lt;^_^&gt;*</description>
-    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><copyright>xxxx</copyright><lastBuildDate>Sat, 18 Apr 2020 21:24:19 &#43;0800</lastBuildDate><atom:link href="https://caijin.dev/zh/tags/axis/" rel="self" type="application/rss+xml" /><item>
-  <title>axios的使用</title>
-  <link>https://caijin.dev/zh/front-end/axios%E7%9A%84%E4%BD%BF%E7%94%A8/</link>
-  <pubDate>Sat, 18 Apr 2020 21:24:19 &#43;0800</pubDate>
-  <author>caijin</author>
-  <guid>https://caijin.dev/zh/front-end/axios%E7%9A%84%E4%BD%BF%E7%94%A8/</guid>
-  <description><![CDATA[axios 的使用 axios 是前端最常见的网络库。主要调用方式有两种形式：axios(config) 和 axios(url, config)，下面简要介绍axios的使用。
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Axis - tag - *&lt;^_^>*</title><link>https://caijin.dev/zh/tags/axis/</link><description>Axis - tag | *&lt;^_^>*</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><copyright>xxxx</copyright><lastBuildDate>Sat, 18 Apr 2020 21:24:19 +0800</lastBuildDate><atom:link href="https://caijin.dev/zh/tags/axis/" rel="self" type="application/rss+xml"/><item><title>axios的使用</title><link>https://caijin.dev/zh/front-end/axios%E7%9A%84%E4%BD%BF%E7%94%A8/</link><pubDate>Sat, 18 Apr 2020 21:24:19 +0800</pubDate><author>caijin</author><guid>https://caijin.dev/zh/front-end/axios%E7%9A%84%E4%BD%BF%E7%94%A8/</guid><description><![CDATA[axios 的使用 axios 是前端最常见的网络库。主要调用方式有两种形式：axios(config) 和 axios(url, config)，下面简要介绍axios的使用。
 1、请求方法 常用的http请求方法有以下5个
 方法 作用 GET 请求资源 POST 新增资源 PUT 更新资源（需要资源的所有信息） PATCH 更新资源的部分信息 DELETE 删除资源 例如有user对象：{&quot;id&quot;:1, &quot;name&quot;:&quot;axios-user&quot;, &quot;age&quot;:20}
 使用axios发起请求可以用axios(config)的形式，如下所示：
@@ -17,7 +6,4 @@ axios({ method:&#34;get&#34;,//请求方法 url:&#34;/users&#34;,//请求的URL 
 2、别名 如果有很多的请求，每个我们都需要写一堆像上面1中的axios的配置信息，一个是写起来比较麻烦，另外一个，代码看起来也比较乱，axios也提供了对应请求方法的别名函数，用axios(url, config)的形式，如下所示：
 //get axios(&#34;/users&#34;,{params:{id:1}}).then((resp)=&gt;{}) //等同于如下方式 axios.get(&#34;/users&#34;,{params:{id:1}}).then((resp)=&gt;{}) //post axios.post(&#34;/user&#34;,{id:2,name:&#34;axios-user2&#34;,age:22}) //put 只更新部分信息也需要将整个资源对象提交 axios.put(&#34;/user&#34;,{id:2,name:&#34;axios-xxx&#34;,age:22}) //patch 只需提交唯一标识和更改的数据项即可 axios.patch(&#34;/users&#34;,{id:2,age:18}) //delete axios.delete(&#34;/users&#34;,{params:{id:2}})3、并发请求 axios 也支持同时发起多个请求，并且可以获取到每个请求的结果，使用axios.all() 和 axios.spread()即可，all()方法的参数是函数数组，spread()方法接受的是回调函数，函数中的参数即是all()中的请求结果，顺序和all()保持一致。
 例子如下：
-axios.all( [ axios.get(&#34;/users&#34;),//请求1 axios.get(&#34;/students&#34;),//请求2 axios.post(&#34;/teachers&#34;,{id:5,name:&#34;teacher wang&#34;,age:35})//请求3 ] ).then( axios.]]></description>
-</item>
-</channel>
-</rss>
+axios.all( [ axios.get(&#34;/users&#34;),//请求1 axios.get(&#34;/students&#34;),//请求2 axios.post(&#34;/teachers&#34;,{id:5,name:&#34;teacher wang&#34;,age:35})//请求3 ] ).then( axios.]]></description></item></channel></rss>

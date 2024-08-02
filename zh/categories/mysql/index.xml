@@ -1,15 +1,4 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-  <channel>
-    <title>Mysql - category - *&lt;^_^&gt;*</title>
-    <link>https://caijin.dev/zh/categories/mysql/</link>
-    <description>Mysql - category | *&lt;^_^&gt;*</description>
-    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><copyright>xxxx</copyright><lastBuildDate>Sat, 02 May 2020 20:18:42 &#43;0800</lastBuildDate><atom:link href="https://caijin.dev/zh/categories/mysql/" rel="self" type="application/rss+xml" /><item>
-  <title>mysql简介</title>
-  <link>https://caijin.dev/zh/mysql/mysql/</link>
-  <pubDate>Sat, 02 May 2020 20:18:42 &#43;0800</pubDate>
-  <author>caijin</author>
-  <guid>https://caijin.dev/zh/mysql/mysql/</guid>
-  <description><![CDATA[Mysql MyISAM vs Innodb?
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title>Mysql - category - *&lt;^_^>*</title><link>https://caijin.dev/zh/categories/mysql/</link><description>Mysql - category | *&lt;^_^>*</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><copyright>xxxx</copyright><lastBuildDate>Sat, 02 May 2020 20:18:42 +0800</lastBuildDate><atom:link href="https://caijin.dev/zh/categories/mysql/" rel="self" type="application/rss+xml"/><item><title>mysql简介</title><link>https://caijin.dev/zh/mysql/mysql/</link><pubDate>Sat, 02 May 2020 20:18:42 +0800</pubDate><author>caijin</author><guid>https://caijin.dev/zh/mysql/mysql/</guid><description>Mysql MyISAM vs Innodb?
 mysql的索引有哪些
 聚簇索引
 在innodb表上定义了一个主键，innodb默认会使用它作为组簇索引（建议每个表都定义个主键） 如果没有定义主键，innodb会查找第一个【唯一索引】作为聚簇索引 如果既没有定义主键，又没有唯一索引，innodb会在内部生成一个名为_GEN_CLUST_INDEX_ 的隐式聚簇索引 聚簇索引如何加快查询速度：因为索引搜索直接指向包含所有行数据页（data page）
@@ -29,7 +18,4 @@ mysql锁类型
 全局锁：对整个数据库实例加锁，主要用于全库备份 表级锁：表锁和元数据锁MDL，表锁：如果不能确定唯一性的话，会对整个表进行加锁；如果没有更改表结构，MDL加读锁，否则加写锁，读锁和写锁是互斥的 行锁：针对特定的数据加锁，mysql对索引加锁，oracle是对数据加锁，innodb行锁的算法： Record locks：为索引纪录上锁，如果没有定义索引，Innodb会为该表创建一个隐藏的聚簇索引，并使用该索引 Gap locks：该锁会锁定一个范围，但是不包括纪录本身。 Next-key locks：就是record locks和gap locks的组合，即锁定一个范围和该纪录本身。Innodb使用该锁解决幻读问题。如果索引具有唯一性，则innodb会将next-key locks自动降为record locks mysql组合索引按照最左匹配的原则进行匹配
 比如有个key（a,b,c)，则支持a|a,b|a,b,c 3种组合进行查找，但不支持b，c查找，而且与where条件的顺序无关，因为优化器会对sql进行优化
 索引失效的条件：
-在索引上做任何操作（计算，函数，自动或者手动类型转换），会导致索引失效而转向全表扫描 存储索引不能使用索引_范围条件_ 右边的列 使用不等于（！= ｜｜ &lt;&gt;）的时候无法使用索引，会导致全表扫描 like以通配符开头，索引失败，全表扫描 一般建议：]]></description>
-</item>
-</channel>
-</rss>
+在索引上做任何操作（计算，函数，自动或者手动类型转换），会导致索引失效而转向全表扫描 存储索引不能使用索引_范围条件_ 右边的列 使用不等于（！= ｜｜ &amp;lt;&amp;gt;）的时候无法使用索引，会导致全表扫描 like以通配符开头，索引失败，全表扫描 一般建议：</description></item></channel></rss>
